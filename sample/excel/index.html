@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software Simulation | Adam Thompson Consulting</title>
+<meta name="description" content="An original software simulation sample: flag overdue invoices with conditional formatting, in Watch, Try and Test modes.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B2A4A;--navy-2:#123E6B;--grey:#5E6873;--line:#DDE2E7;--orange:#F07A1A;--orange-ink:#B8530A;--bg:#F4F6F8;--good:#1F7A4D;--good-bg:#E8F5EE;--bad:#A3352B;--bad-bg:#FBEAE8;
+  --xl:#1D6F42;--xl-2:#185C37;--xl-tint:#E6F2EA;--cellsel:#CFE6D7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:Figtree,system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--navy)}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top .in{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.top a{text-decoration:none;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px}
+.top svg{width:30px;height:23px}
+.top .lab{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+main{max-width:1240px;margin:0 auto;padding:26px 20px 56px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--orange-ink);margin:0 0 8px}
+h1{font-size:clamp(28px,4.5vw,40px);font-weight:800;line-height:1.12;margin:0 0 8px;letter-spacing:-.01em}
+.sub{color:var(--grey);margin:0 0 20px;max-width:760px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+@media (max-width:1020px){.layout{grid-template-columns:1fr}}
+
+/* Panel */
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:18px}
+.modes button{all:unset;box-sizing:border-box;text-align:center;padding:9px 6px;border-radius:9px;font-weight:700;font-size:15px;cursor:pointer;color:var(--grey)}
+.modes button[aria-pressed="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(11,42,74,.12)}
+.modes button:focus-visible{outline:3px solid var(--orange)}
+.mdesc{font-size:14.5px;color:var(--grey);margin:0 0 16px}
+.steps{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:8px;counter-reset:s}
+.steps li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--grey);padding:8px 10px;border-radius:10px}
+.steps li::before{counter-increment:s;content:counter(s);flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--grey);display:grid;place-items:center;font-size:12px;font-weight:800}
+.steps li.now{background:#FFF6EE;color:var(--navy);font-weight:600}
+.steps li.now::before{background:var(--orange);color:#fff}
+.steps li.done{color:var(--navy)}
+.steps li.done::before{content:"✓";background:var(--good);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:15.5px;padding:11px 18px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none}
+.btn:hover{background:var(--navy-2)}
+.btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.ghost:hover{background:var(--navy);color:#fff}
+.btn.orange{background:var(--orange);color:#081F38}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.result{display:none;margin-top:6px}
+.result.show{display:block}
+.score{font-size:44px;font-weight:800;line-height:1;margin:4px 0 8px}
+
+/* Stage scaler */
+.stagewrap{position:relative;width:100%;}
+.stagebox{position:relative;width:100%;overflow:hidden;border-radius:14px;box-shadow:0 10px 30px rgba(11,42,74,.16);background:#fff}
+#stage{position:absolute;top:0;left:0;width:960px;height:600px;transform-origin:0 0;font-family:"Segoe UI",system-ui,sans-serif;font-size:13px;color:#222;background:#fff;user-select:none}
+
+/* App chrome */
+.tb{height:34px;background:var(--xl);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12.5px}
+.tb .dots{display:flex;gap:6px}.tb .dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35)}
+.tabs{display:flex;gap:2px;background:var(--xl);padding:0 8px}
+.tabs span{padding:6px 14px;color:#E6F2EA;font-size:12.5px;border-radius:4px 4px 0 0}
+.tabs span.on{background:#F3F3F3;color:#111;font-weight:600}
+.ribbon{height:86px;background:#F3F3F3;border-bottom:1px solid #D4D4D4;display:flex;gap:4px;padding:6px 8px}
+.grp{display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid #D9D9D9;padding:0 10px}
+.grp .items{display:flex;gap:4px;align-items:flex-start}
+.grp .gl{font-size:11px;color:#666;text-align:center;padding-bottom:2px}
+.rb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 6px;border-radius:4px;font-size:11.5px;color:#222;cursor:pointer;border:1px solid transparent;background:none;font-family:inherit;line-height:1.15;text-align:center}
+.rb:hover{background:#E1E1E1}
+.rb .ic{width:26px;height:26px;border-radius:4px;display:grid;place-items:center}
+.rb.small{flex-direction:row;padding:3px 6px}
+.rb.small .ic{width:18px;height:18px}
+.fbar{height:28px;display:flex;align-items:center;border-bottom:1px solid #D4D4D4;background:#fff}
+.namebox{width:80px;height:100%;border-right:1px solid #D4D4D4;display:flex;align-items:center;padding-left:8px;font-size:12px}
+.fx{padding:0 10px;color:#666;font-style:italic;border-right:1px solid #D4D4D4;height:100%;display:flex;align-items:center}
+.fval{padding-left:10px;font-size:12.5px}
+.grid{position:relative;display:grid;grid-template-columns:40px 110px 170px 120px 130px 130px 1fr;font-size:12.5px}
+.grid div{height:26px;border-right:1px solid #E1E1E1;border-bottom:1px solid #E1E1E1;display:flex;align-items:center;padding:0 8px;white-space:nowrap;overflow:hidden}
+.grid .h{background:#F3F3F3;color:#555;justify-content:center;font-size:12px}
+.grid .h.col{cursor:pointer}
+.grid .h.col:hover{background:#E4E4E4}
+.grid .h.sel{background:#D3E8DB;color:var(--xl-2);font-weight:700;border-bottom:2px solid var(--xl)}
+.grid .rh{background:#F3F3F3;color:#555;justify-content:center}
+.grid .th{font-weight:700;background:#FAFAFA}
+.grid .num{justify-content:flex-end}
+.grid .sel{background:var(--cellsel)}
+.grid .hl{background:#FFC7CE !important;color:#9C0006;font-weight:600}
+.sheettabs{position:absolute;left:0;right:0;bottom:0;height:28px;background:#F3F3F3;border-top:1px solid #D4D4D4;display:flex;align-items:center;gap:2px;padding-left:40px;font-size:12px}
+.sheettabs span{padding:4px 14px;background:#fff;border-bottom:2px solid var(--xl);color:var(--xl-2);font-weight:600}
+
+/* Menus & dialog */
+.menu{position:absolute;background:#fff;border:1px solid #C8C8C8;box-shadow:0 6px 18px rgba(0,0,0,.18);padding:4px 0;min-width:210px;z-index:5;display:none}
+.menu.open{display:block}
+.mi{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:6px 14px;cursor:pointer;font-size:12.5px;width:100%;border:0;background:none;font-family:inherit;text-align:left;color:#222}
+.mi:hover,.mi.hov{background:#E6F2EA}
+.msep{height:1px;background:#E1E1E1;margin:4px 0}
+.dlg{position:absolute;left:300px;top:200px;width:380px;background:#fff;border:1px solid #BDBDBD;box-shadow:0 12px 32px rgba(0,0,0,.25);z-index:6;display:none}
+.dlg.open{display:block}
+.dlg .dt{background:#F3F3F3;padding:8px 12px;font-weight:600;font-size:12.5px;display:flex;justify-content:space-between;border-bottom:1px solid #D4D4D4}
+.dlg .db{padding:14px}
+.dlg label{display:block;font-size:12.5px;margin-bottom:6px}
+.dlg .f{display:flex;gap:8px;align-items:center}
+.dlg input{width:120px;height:26px;border:1px solid #999;padding:0 6px;font:inherit;font-size:12.5px}
+.dlg input:focus{outline:2px solid var(--xl)}
+.dlg select{height:26px;font:inherit;font-size:12px;border:1px solid #999}
+.dlg .bt{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.dlg .bt button{min-width:72px;height:26px;font:inherit;font-size:12.5px;border:1px solid #999;background:#F3F3F3;cursor:pointer}
+.dlg .bt button.pri{border-color:var(--xl);background:var(--xl);color:#fff}
+
+/* Hotspot, cursor, caption */
+.hot{position:absolute;border:2.5px solid var(--orange);border-radius:6px;box-shadow:0 0 0 4px rgba(240,122,26,.25);pointer-events:none;z-index:9;display:none;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 9px rgba(240,122,26,.08)}}
+.cursor{position:absolute;width:22px;height:22px;z-index:20;pointer-events:none;transition:left .8s cubic-bezier(.4,.1,.2,1),top .8s cubic-bezier(.4,.1,.2,1);display:none}
+.click{position:absolute;width:30px;height:30px;border-radius:50%;border:3px solid var(--orange);z-index:19;pointer-events:none;opacity:0}
+.click.go{animation:ck .5s ease-out}
+@keyframes ck{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.4)}}
+.cap{position:absolute;z-index:15;max-width:270px;background:var(--navy);color:#fff;font-family:Figtree,system-ui,sans-serif;font-size:14px;line-height:1.4;padding:10px 13px;border-radius:10px;box-shadow:0 8px 20px rgba(11,42,74,.3);display:none}
+.cap b{color:#FFB37A}
+.toast{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);z-index:16;font-family:Figtree,system-ui,sans-serif;font-size:14px;padding:9px 14px;border-radius:10px;display:none;max-width:80%;text-align:center}
+.toast.bad{display:block;background:var(--bad-bg);color:var(--bad);border:1px solid #F0C2BD}
+.toast.good{display:block;background:var(--good-bg);color:var(--good);border:1px solid #BFE3CE}
+@media (prefers-reduced-motion:reduce){.hot{animation:none}.cursor{transition:none}}
+.foot{margin-top:22px;font-size:14px;color:var(--grey);text-align:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <a href="/"><svg viewBox="0 18 120 92" aria-hidden="true"><path fill="#0B2A4A" d="M14 104 C6 104 4 96 8 90 C12 84 22 80 40 79 C60 78 86 78 100 81 C112 84 116 92 112 99 C109 104 102 104 96 104 Z"/><path fill="#7A8590" d="M30 72 C22 72 21 64 26 59 C31 54 42 52 58 52 C74 52 90 54 94 60 C98 66 94 72 86 72 Z"/><path fill="#F07A1A" d="M39 47 C30 47 30 38 35 33 C41 26 53 23 65 23 C79 23 90 27 91 35 C92 43 87 47 79 47 Z"/></svg>← Back to site</a>
+  <span class="lab">Software simulation</span>
+</div></div>
+
+<main>
+  <p class="eyebrow">Software simulation · about 3 minutes</p>
+  <h1>Flag overdue invoices in a spreadsheet</h1>
+  <p class="sub">A common Excel task, taught the way people actually learn software: watch it once, try it with help, then prove you can do it on your own.</p>
+
+  <div class="layout">
+    <div class="stagewrap">
+      <div class="stagebox" id="box">
+        <div id="stage" aria-label="Simulated spreadsheet application">
+          <div class="tb"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Invoices.xlsx · Spreadsheet</span><span></span></div>
+          <div class="tabs" aria-hidden="true"><span>File</span><span class="on">Home</span><span>Insert</span><span>Page Layout</span><span>Formulas</span><span>Data</span><span>View</span></div>
+          <div class="ribbon">
+            <div class="grp"><div class="items">
+              <button class="rb" data-t="paste" type="button"><span class="ic" style="background:#E8E8E8">📋</span>Paste</button>
+            </div><div class="gl">Clipboard</div></div>
+            <div class="grp"><div class="items">
+              <button class="rb small" data-t="bold" type="button"><span class="ic"><b>B</b></span></button>
+              <button class="rb small" data-t="italic" type="button"><span class="ic"><i>I</i></span></button>
+              <button class="rb small" data-t="under" type="button"><span class="ic"><u>U</u></span></button>
+            </div><div class="gl">Font</div></div>
+            <div class="grp"><div class="items">
+              <button class="rb small" data-t="align" type="button"><span class="ic">≡</span>Align</button>
+              <button class="rb small" data-t="wrap" type="button"><span class="ic">↵</span>Wrap</button>
+            </div><div class="gl">Alignment</div></div>
+            <div class="grp"><div class="items">
+              <button class="rb" data-t="cf" id="cfBtn" type="button"><span class="ic" style="background:#FDE2E4;color:#9C0006;font-weight:800">▦</span>Conditional<br>Formatting ▾</button>
+              <button class="rb" data-t="table" type="button"><span class="ic" style="background:#DCEEFF">▤</span>Format as<br>Table ▾</button>
+              <button class="rb" data-t="styles" type="button"><span class="ic" style="background:#FFF2CC">▣</span>Cell<br>Styles ▾</button>
+            </div><div class="gl">Styles</div></div>
+            <div class="grp" style="border:0"><div class="items">
+              <button class="rb" data-t="sort" type="button"><span class="ic" style="background:#E8E8E8">⇅</span>Sort &amp;<br>Filter ▾</button>
+            </div><div class="gl">Editing</div></div>
+          </div>
+          <div class="fbar"><div class="namebox" id="nb">A1</div><div class="fx">fx</div><div class="fval" id="fv">Invoice #</div></div>
+          <div class="grid" id="grid"></div>
+          <div class="sheettabs" aria-hidden="true"><span>Invoices</span></div>
+
+          <div class="menu" id="cfMenu" role="menu">
+            <button class="mi" data-t="hcr" role="menuitem" type="button">Highlight Cells Rules <span>▸</span></button>
+            <button class="mi" data-t="topb" role="menuitem" type="button">Top/Bottom Rules <span>▸</span></button>
+            <button class="mi" data-t="bars" role="menuitem" type="button">Data Bars <span>▸</span></button>
+            <button class="mi" data-t="scales" role="menuitem" type="button">Color Scales <span>▸</span></button>
+            <div class="msep"></div>
+            <button class="mi" data-t="newrule" role="menuitem" type="button">New Rule…</button>
+            <button class="mi" data-t="clear" role="menuitem" type="button">Clear Rules <span>▸</span></button>
+            <button class="mi" data-t="manage" role="menuitem" type="button">Manage Rules…</button>
+          </div>
+          <div class="menu" id="hcrMenu" role="menu">
+            <button class="mi" data-t="gt" role="menuitem" type="button">Greater Than…</button>
+            <button class="mi" data-t="lt" role="menuitem" type="button">Less Than…</button>
+            <button class="mi" data-t="between" role="menuitem" type="button">Between…</button>
+            <button class="mi" data-t="eq" role="menuitem" type="button">Equal To…</button>
+            <button class="mi" data-t="text" role="menuitem" type="button">Text that Contains…</button>
+            <button class="mi" data-t="dup" role="menuitem" type="button">Duplicate Values…</button>
+          </div>
+          <div class="dlg" id="dlg" role="dialog" aria-label="Greater Than">
+            <div class="dt"><span>Greater Than</span><span aria-hidden="true">✕</span></div>
+            <div class="db">
+              <label for="gtv">Format cells that are GREATER THAN:</label>
+              <div class="f"><input id="gtv" data-t="input" autocomplete="off" inputmode="numeric"> <span>with</span>
+                <select data-t="fmt" aria-label="Format"><option>Light Red Fill with Dark Red Text</option><option>Yellow Fill with Dark Yellow Text</option><option>Green Fill with Dark Green Text</option></select></div>
+              <div class="bt"><button class="pri" data-t="ok" type="button">OK</button><button data-t="cancel" type="button">Cancel</button></div>
+            </div>
+          </div>
+
+          <div class="hot" id="hot"></div>
+          <div class="click" id="ck"></div>
+          <svg class="cursor" id="cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l14 11-6.5 1 3.5 7-3 1.5-3.5-7L4 20z" fill="#111" stroke="#fff" stroke-width="1.5"/></svg>
+          <div class="cap" id="cap"></div>
+          <div class="toast" id="toast" role="status"></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <div class="modes" role="group" aria-label="Mode">
+        <button type="button" data-m="watch" aria-pressed="true">Watch</button>
+        <button type="button" data-m="try" aria-pressed="false">Try</button>
+        <button type="button" data-m="test" aria-pressed="false">Test</button>
+      </div>
+      <p class="mdesc" id="mdesc"></p>
+      <ol class="steps" id="steps"></ol>
+      <div class="row" id="ctrl"></div>
+      <div class="result" id="result" aria-live="polite"></div>
+    </aside>
+  </div>
+  <p class="foot">An original sample by Adam Thompson Consulting. The interface is a simplified illustration; all data is fictional.</p>
+  <div class="sr" aria-live="polite" id="live"></div>
+</main>
+
+<script>
+// ---------- Data ----------
+const ROWS = [
+  ['INV-1041','Northwind Bakery',1250,12,'Sent'],
+  ['INV-1042','Blue Spruce Dental',4800,45,'Reminder sent'],
+  ['INV-1043','Riverbend Garage',960,0,'Paid'],
+  ['INV-1044','Maple Leaf Events',3200,61,'Reminder sent'],
+  ['INV-1045','Cedar Point Optical',2150,28,'Sent'],
+  ['INV-1046','Harbour Freight Co.',7400,33,'Reminder sent'],
+  ['INV-1047','Pine Ridge Café',540,5,'Sent'],
+  ['INV-1048','Summit Physio',1875,90,'Collections'],
+  ['INV-1049','Lakeside Florist',690,0,'Paid'],
+  ['INV-1050','Granite Builders',12300,31,'Reminder sent']
+];
+const COLS = ['A','B','C','D','E','F'];
+const HEAD = ['Invoice #','Client','Amount ($)','Days overdue','Status',''];
+
+const STEPS = [
+  { t: 'colD',  text: 'Select the <b>Days overdue</b> column by clicking its header, <b>D</b>.', hint: 'Click the column letter <b>D</b> at the top of the Days overdue column.' },
+  { t: 'cf',    text: 'On the Home tab, click <b>Conditional Formatting</b>.', hint: 'Look in the <b>Styles</b> group of the ribbon.' },
+  { t: 'hcr',   text: 'Point to <b>Highlight Cells Rules</b>.', hint: 'It’s the first option in the menu.' },
+  { t: 'gt',    text: 'Choose <b>Greater Than…</b>', hint: 'We want anything <em>more than</em> 30 days.' },
+  { t: 'input', text: 'Type <b>30</b> in the box.', hint: 'Click the box, then type 30.', type: '30' },
+  { t: 'ok',    text: 'Keep the red format and click <b>OK</b>.', hint: 'The OK button is at the bottom of the dialog.' }
+];
+const PANEL = ['Select column D', 'Open Conditional Formatting', 'Highlight Cells Rules', 'Greater Than…', 'Enter 30', 'Click OK'];
+const MODE_DESC = {
+  watch: 'Watch the task once. The cursor shows each click, with a caption explaining why.',
+  try: 'Your turn, with help. The highlight shows where to click, and you’ll get a hint if you miss.',
+  test: 'No highlights. Complete the task on your own, and you’ll be scored on accuracy.'
+};
+
+// ---------- Elements ----------
+const stage = document.getElementById('stage'), box = document.getElementById('box');
+const $ = id => document.getElementById(id);
+const grid = $('grid'), cfMenu = $('cfMenu'), hcrMenu = $('hcrMenu'), dlg = $('dlg');
+const hot = $('hot'), cur = $('cur'), ck = $('ck'), cap = $('cap'), toast = $('toast'), live = $('live');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = ms => new Promise(r => setTimeout(r, reduce ? Math.min(ms, 300) : ms));
+
+let mode = 'watch', step = 0, errors = 0, misses = 0, running = 0, t0 = 0;
+
+// ---------- Scale the 960x600 stage to fit ----------
+function fit() { const s = box.clientWidth / 960; stage.style.transform = `scale(${s})`; box.style.height = 600 * s + 'px'; }
+addEventListener('resize', fit);
+
+// ---------- Build grid ----------
+function buildGrid() {
+  let h = '<div class="h"></div>' + COLS.map(c => `<div class="h col" data-t="col${c}">${c}</div>`).join('');
+  h += '<div class="rh">1</div>' + HEAD.map((x, i) => `<div class="th c${COLS[i]}">${x}</div>`).join('');
+  ROWS.forEach((r, i) => {
+    h += `<div class="rh">${i + 2}</div>` +
+      `<div class="cA">${r[0]}</div><div class="cB">${r[1]}</div><div class="num cC">${r[2].toLocaleString('en-CA')}</div>` +
+      `<div class="num cD" data-v="${r[3]}">${r[3]}</div><div class="cE">${r[4]}</div><div class="cF"></div>`;
+  });
+  for (let i = ROWS.length + 2; i <= 16; i++) h += `<div class="rh">${i}</div>` + COLS.map(c => `<div class="c${c}"></div>`).join('');
+  grid.innerHTML = h;
+}
+
+function reset() {
+  buildGrid();
+  [cfMenu, hcrMenu, dlg].forEach(e => e.classList.remove('open'));
+  $('gtv').value = ''; $('nb').textContent = 'A1'; $('fv').textContent = 'Invoice #';
+  hot.style.display = 'none'; cap.style.display = 'none'; toast.className = 'toast'; cur.style.display = 'none';
+  step = 0; errors = 0; misses = 0;
+  renderSteps();
+}
+
+// ---------- Geometry ----------
+function el(t) { return stage.querySelector(`[data-t="${t}"]`); }
+function rect(t) {
+  const e = el(t), s = stage.getBoundingClientRect(), r = e.getBoundingClientRect(), k = s.width / 960;
+  return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k };
+}
+function showHot(t) { const r = rect(t); Object.assign(hot.style, { left: r.x - 4 + 'px', top: r.y - 4 + 'px', width: r.w + 8 + 'px', height: r.h + 8 + 'px', display: 'block' }); }
+function showCap(t, html) {
+  const r = rect(t); cap.innerHTML = html; cap.style.display = 'block';
+  let x = r.x + r.w + 16, y = r.y;
+  if (x + 280 > 960) x = Math.max(8, r.x - 286);
+  if (t === 'colD') { x = r.x + r.w + 14; y = r.y + 34; }
+  if (t === 'input') { x = r.x; y = r.y + r.h + 46; }
+  if (t === 'gt') { x = r.x; y = r.y + 165; }
+  cap.style.left = x + 'px'; cap.style.top = Math.min(y, 520) + 'px';
+}
+function flash(msg, kind) { toast.innerHTML = msg; toast.className = 'toast ' + kind; live.textContent = toast.textContent; }
+
+// ---------- Actions (what each correct step does) ----------
+function act(t) {
+  if (t === 'colD') {
+    stage.querySelectorAll('.cD').forEach(c => c.classList.add('sel'));
+    el('colD').classList.add('sel'); $('nb').textContent = 'D1'; $('fv').textContent = 'Days overdue';
+  }
+  if (t === 'cf') { const r = rect('cf'); cfMenu.style.left = r.x + 'px'; cfMenu.style.top = r.y + r.h + 2 + 'px'; cfMenu.classList.add('open'); }
+  if (t === 'hcr') { const r = rect('hcr'); hcrMenu.style.left = r.x + r.w + 2 + 'px'; hcrMenu.style.top = r.y - 4 + 'px'; hcrMenu.classList.add('open'); el('hcr').classList.add('hov'); }
+  if (t === 'gt') { cfMenu.classList.remove('open'); hcrMenu.classList.remove('open'); el('hcr').classList.remove('hov'); dlg.classList.add('open'); }
+  if (t === 'ok') {
+    dlg.classList.remove('open');
+    stage.querySelectorAll('.cD[data-v]').forEach(c => { if (+c.dataset.v > 30) c.classList.add('hl'); });
+  }
+}
+
+// ---------- Panel ----------
+function renderSteps() {
+  $('steps').style.display = (mode === 'test' && step < STEPS.length) ? 'none' : '';
+  $('steps').innerHTML = PANEL.map((p, i) => `<li class="${i < step ? 'done' : i === step ? 'now' : ''}">${p}</li>`).join('');
+}
+function setMode(m) {
+  mode = m; running++;
+  document.querySelectorAll('.modes button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === m)));
+  $('mdesc').textContent = MODE_DESC[m];
+  $('result').className = 'result';
+  reset();
+  if (m === 'watch') { $('ctrl').innerHTML = '<button class="btn" id="play" type="button">▶ Play demo</button>'; $('play').onclick = playDemo; showCap('colD', 'Press <b>Play demo</b> to watch the task.'); }
+  else { $('ctrl').innerHTML = '<button class="btn ghost" id="restart" type="button">Restart</button>'; $('restart').onclick = () => setMode(mode); guide(); t0 = Date.now(); }
+  if (m === 'test') { cap.style.display = 'block'; cap.innerHTML = '<b>Your task:</b> highlight every invoice that is more than 30 days overdue in red.'; cap.style.left = '600px'; cap.style.top = '470px'; }
+}
+function guide() {
+  renderSteps();
+  const s = STEPS[step]; if (!s) return;
+  if (mode === 'try') { showHot(s.t); showCap(s.t, s.text); }
+  if (s.t === 'input' && mode !== 'watch') $('gtv').focus({ preventScroll: true });
+}
+
+// ---------- Watch mode ----------
+async function playDemo() {
+  const id = ++running; reset();
+  $('play').disabled = true; $('play').textContent = 'Playing…';
+  cur.style.display = 'block'; cur.style.left = '480px'; cur.style.top = '420px';
+  await wait(400);
+  for (let i = 0; i < STEPS.length; i++) {
+    if (id !== running) return;
+    step = i; renderSteps();
+    const s = STEPS[i], r = rect(s.t);
+    showCap(s.t, s.text); live.textContent = cap.textContent;
+    cur.style.left = r.x + r.w / 2 + 'px'; cur.style.top = r.y + r.h / 2 + 'px';
+    await wait(1100); if (id !== running) return;
+    Object.assign(ck.style, { left: r.x + r.w / 2 - 15 + 'px', top: r.y + r.h / 2 - 15 + 'px' });
+    ck.classList.remove('go'); void ck.offsetWidth; ck.classList.add('go');
+    if (s.type) { for (const ch of s.type) { $('gtv').value += ch; await wait(220); } }
+    else act(s.t);
+    await wait(1500);
+  }
+  if (id !== running) return;
+  step = STEPS.length; renderSteps();
+  cur.style.display = 'none';
+  showCap('colD', 'Done. Every invoice over <b>30 days</b> is now flagged in red, and the rule updates itself as the numbers change.');
+  $('ctrl').innerHTML = '<button class="btn ghost" id="play" type="button">↺ Replay</button><button class="btn" id="totry" type="button">Now try it →</button>';
+  $('play').onclick = playDemo; $('totry').onclick = () => setMode('try');
+}
+
+// ---------- Try / Test interaction ----------
+function handle(t, e) {
+  if (mode === 'watch') return;
+  const s = STEPS[step]; if (!s) return;
+  if (t === 'input' || t === 'fmt') return;
+  if (s.t === 'input') return miss(t === 'ok' ? 'Enter <b>30</b> in the box first.' : s.hint);
+  if (t === s.t) {
+    act(t); step++; misses = 0; toast.className = 'toast';
+    if (step >= STEPS.length) return finish();
+    guide();
+  } else miss(s.hint);
+}
+function miss(hint) {
+  errors++; misses++;
+  if (mode === 'try') flash('Not quite. ' + hint, 'bad');
+  else flash(misses >= 2 ? 'Hint: ' + hint : 'Not quite. Try again.', 'bad');
+}
+function finish() {
+  hot.style.display = 'none'; renderSteps();
+  const secs = Math.round((Date.now() - t0) / 1000);
+  if (mode === 'try') {
+    showCap('colD', 'Nice work. Every invoice over <b>30 days</b> is flagged. Ready to do it without help?');
+    flash('Task complete.', 'good');
+    $('ctrl').innerHTML = '<button class="btn ghost" id="restart" type="button">Try again</button><button class="btn" id="totest" type="button">Take the test →</button>';
+    $('restart').onclick = () => setMode('try'); $('totest').onclick = () => setMode('test');
+  } else {
+    cap.style.display = 'none';
+    const acc = Math.max(0, Math.round(100 * STEPS.length / (STEPS.length + errors)));
+    const msg = errors === 0 ? 'Perfect: no wrong clicks.' : errors === 1 ? 'Solid. One wrong turn, but you got there.' : errors <= 2 ? 'Solid. A couple of wrong turns, but you got there.' : 'You finished. Run it once more to build the habit.';
+    flash('Task complete.', 'good');
+    $('result').className = 'result show';
+    $('result').innerHTML = `<p class="eyebrow" style="margin-top:4px">Your result</p><div class="score">${acc}%</div><p style="margin:0 0 6px">${msg}</p><p class="mdesc">${errors} wrong click${errors === 1 ? '' : 's'} · ${secs} seconds</p><div class="row"><button class="btn ghost" id="restart2" type="button">Retake</button><a class="btn orange" href="/#contact">Build one for your team →</a></div>`;
+    $('restart2').onclick = () => setMode('test');
+    $('ctrl').innerHTML = '';
+  }
+}
+
+stage.addEventListener('click', e => {
+  const tgt = e.target.closest('[data-t]');
+  if (mode === 'watch') return;
+  if (!tgt) { if (e.target.closest('#stage') && !e.target.closest('.dlg')) miss((STEPS[step] || {}).hint || ''); return; }
+  handle(tgt.dataset.t, e);
+});
+$('gtv').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); handle('ok', e); } });
+$('gtv').addEventListener('input', () => {
+  toast.className = 'toast';
+  if (mode !== 'watch' && STEPS[step] && STEPS[step].t === 'input' && $('gtv').value.trim() === '30') { step++; misses = 0; guide(); }
+});
+document.querySelectorAll('.modes button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+
+buildGrid(); fit(); setMode('watch');
+</script>
+</body>
+</html>
