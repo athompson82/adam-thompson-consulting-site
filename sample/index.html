@@ -229,18 +229,28 @@ function speak(text, id) {
   if (tiles) tiles.classList.add('speaking');
   const done = () => tiles && tiles.classList.remove('speaking');
   const fallback = Math.min(6000, 900 + text.length * 45);
-  if (st.voice && id) {
+  if (id) {
     return new Promise(res => {
       let finished = false;
-      const end = () => { if (!finished) { finished = true; done(); res(); } };
-      try {
-        if (audio) audio.pause();
-        audio = new Audio('media/' + id + '.mp3');
-        audio.onended = end;
-        audio.onerror = () => setTimeout(end, fallback);
-        audio.play().catch(() => setTimeout(end, fallback));
-        setTimeout(end, 15000);
-      } catch (e) { setTimeout(end, fallback); }
+      const jt = document.getElementById('jt');
+      const end = () => { if (finished) return; finished = true; if (jt) { jt.pause(); jt.style.opacity = 0; } done(); res(); };
+      const viaAudio = () => {
+        if (!st.voice) return setTimeout(end, fallback);
+        try { if (audio) audio.pause(); audio = new Audio('media/' + id + '.mp3'); audio.onended = end;
+          audio.onerror = () => setTimeout(end, fallback); audio.play().catch(() => setTimeout(end, fallback)); } catch (e) { setTimeout(end, fallback); }
+      };
+      setTimeout(end, 15000);
+      if (!jt) return viaAudio();
+      if (audio) audio.pause();
+      jt.muted = !st.voice;
+      jt.onended = end;
+      jt.onerror = () => { jt.style.opacity = 0; viaAudio(); };
+      jt.src = 'media/talk/' + id + '.mp4';
+      jt.onplaying = () => { jt.style.opacity = 1; };
+      jt.play().catch(() => {
+        // Autoplay with sound blocked: play the clip muted with the separate audio track instead.
+        jt.muted = true; jt.play().then(() => { if (st.voice) { audio = new Audio('media/' + id + '.mp3'); audio.play().catch(()=>{}); } }).catch(() => { jt.style.opacity = 0; viaAudio(); });
+      });
     });
   }
   return wait(reduce ? 400 : fallback).then(done);
@@ -249,6 +259,7 @@ function muteLabel() { return st.voice ? '\u{1F50A} Sound on' : '\u{1F507} Sound
 function toggleVoice() {
   st.voice = !st.voice;
   if (!st.voice && audio) audio.pause();
+  const jt = document.getElementById('jt'); if (jt) jt.muted = !st.voice;
   const b = document.getElementById('mute'); if (b) { b.textContent = muteLabel(); b.setAttribute('aria-pressed', String(!st.voice)); }
 }
 
@@ -284,7 +295,7 @@ function meetingShell() {
     <div class="meet">
       <div class="mbar"><span><b>Weekly check-in</b> · Jordan &amp; you</span><span style="display:flex;gap:12px;align-items:center"><button class="mute" id="mute" type="button" aria-pressed="${!st.voice}">${muteLabel()}</button><span class="rec" id="clock">00:00</span></span></div>
       <div class="tiles mood-${st.mood}">
-        <div class="main"><video id="jv" src="media/jordan.mp4" poster="media/jordan.jpg" autoplay muted loop playsinline aria-label="Jordan on the video call"></video></div>
+        <div class="main"><video id="jv" src="media/jordan.mp4" poster="media/jordan.jpg" autoplay muted loop playsinline aria-label="Jordan on the video call"></video><video id="jt" playsinline preload="auto" aria-hidden="true" style="opacity:0;transition:opacity .15s"></video></div>
         <div class="ring"></div>
         <div class="name">Jordan <span class="wave" aria-hidden="true"><i></i><i></i><i></i></span></div>
         <div class="self" aria-hidden="true">You</div>
