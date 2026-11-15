@@ -28,6 +28,24 @@ h1{font-size:clamp(28px,4.5vw,40px);font-weight:800;line-height:1.12;margin:0 0 
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
 @media (max-width:1060px){.layout{grid-template-columns:1fr}}
 .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+.habits{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.habits p.hl{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ai)}
+.habits div{display:flex;gap:9px;font-size:14px;line-height:1.35;padding:5px 6px;border-radius:8px;transition:background .3s}
+.habits div i{font-style:normal;flex:none;width:20px;height:20px;border-radius:50%;background:var(--ai-bg);color:var(--ai);font-size:11.5px;font-weight:800;display:grid;place-items:center}
+.habits div.lit{background:#FFF1C7}
+.intro{position:absolute;inset:32px 0 0 0;z-index:30;background:rgba(11,42,74,.55);display:none;align-items:center;justify-content:center;font-family:Figtree,system-ui,sans-serif}
+.intro.open{display:flex}
+.ibox{width:760px;background:#fff;border-radius:16px;padding:30px 34px;box-shadow:0 20px 50px rgba(0,0,0,.3);color:var(--navy)}
+.ibox .k{font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ai);margin:0 0 6px}
+.ibox h2{margin:0 0 6px;font-size:28px;font-weight:800;line-height:1.15}
+.ibox .lead{margin:0 0 18px;color:var(--grey);font-size:16px}
+.hcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.hcards div{background:var(--ai-bg);border-radius:12px;padding:14px}
+.hcards b{display:block;font-size:16.5px;margin:6px 0 4px}
+.hcards span{font-size:14px;color:#3D3A5C;line-height:1.4;display:block}
+.hcards i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--ai);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.ifoot{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid var(--line);padding-top:16px;font-size:14.5px;color:var(--grey)}
+.ifoot button{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:16px;padding:11px 22px;border-radius:999px;background:var(--orange);color:#081F38;flex:none}
 .brief{background:var(--navy);color:#fff;border-radius:14px;padding:14px 16px;font-size:15px;margin-bottom:16px}
 .brief b{color:#FFB37A}
 .brief small{display:block;opacity:.7;font-size:12.5px;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
@@ -230,6 +248,19 @@ h1{font-size:clamp(28px,4.5vw,40px);font-weight:800;line-height:1.12;margin:0 0 
           </div>
         </div>
 
+        <div class="intro" id="intro">
+          <div class="ibox">
+            <p class="k">✦ Before you start</p>
+            <h2>Working with an AI assistant</h2>
+            <p class="lead">AI can turn a messy export into a finished report in minutes. Whether that report is right depends on you. Three habits make the difference:</p>
+            <div class="hcards">
+              <div><i>1</i><b>Be specific</b><span>Say exactly what you want: the format, the columns, the categories. It can’t read your mind, or your manager’s.</span></div>
+              <div><i>2</i><b>One job at a time</b><span>Smaller requests give you changes you can actually see and check.</span></div>
+              <div><i>3</i><b>Check before you trust</b><span>AI is fast and confident, but not always right. Verify against the data before anything goes out.</span></div>
+            </div>
+            <div class="ifoot"><span>You’ll be scored on <b>choosing strong prompts</b> and <b>catching the AI’s mistakes</b>.</span><button data-t="begin" type="button">Start the task →</button></div>
+          </div>
+        </div>
         <div class="hot" id="hot"></div>
         <div class="capbar"><div id="cap"></div><div class="toast" id="toast" role="status"></div></div>
       </div>
@@ -237,6 +268,11 @@ h1{font-size:clamp(28px,4.5vw,40px);font-weight:800;line-height:1.12;margin:0 0 
 
     <aside class="panel">
       <div class="brief"><small>Message from Dana, your manager</small>Can you send me October sales <b>by category</b> before Friday? Just use the store export. Thanks!</div>
+      <div class="habits" id="habits"><p class="hl">✦ Prompting habits</p>
+        <div><i>1</i><span><b>Be specific</b> about what you want</span></div>
+        <div><i>2</i><span><b>One job at a time</b>, so you can check it</span></div>
+        <div><i>3</i><span><b>Check before you trust</b> the output</span></div>
+      </div>
       <ol class="steps" id="steps"></ol>
       <div class="row" id="ctrl"><button class="btn ghost" id="showme" type="button">Stuck? Show me</button><button class="btn ghost" id="restart" type="button">Restart</button></div>
       <div class="result" id="result" aria-live="polite"></div>
@@ -327,8 +363,11 @@ function renderGrid(){
   grid.innerHTML = h;
 }
 function say(html){ cap.innerHTML = '<span>' + html + '</span>'; }
-function flash(html, kind){ toast.innerHTML = html; toast.className = 'toast ' + kind; }
-function clearToast(){ toast.className = 'toast'; }
+function flash(html, kind){ toast.innerHTML = '<span>' + html + '</span>'; toast.className = 'toast ' + kind; }
+const HAB = ['', 'Habit 1 · Be specific.', 'Habit 2 · One job at a time.', 'Habit 3 · Check before you trust.'];
+function lightHabit(h){ document.querySelectorAll('#habits > div').forEach((d,i)=>d.classList.toggle('lit', i===h-1)); }
+function coach(h, text){ lightHabit(h); flash('<b>' + HAB[h] + '</b> ' + text, 'bad'); }
+function clearToast(){ toast.className = 'toast'; lightHabit(0); }
 function rect(sel){
   const e = stage.querySelector(sel); if (!e) return null;
   const s = stage.getBoundingClientRect(), r = e.getBoundingClientRect(), k = s.width/980;
@@ -374,7 +413,8 @@ function miss(text){
   if (S.phase === 'dup') S.firstCatch.dup = false;
   if (S.phase === 'cat' || S.phase === 'catfix') S.firstCatch.cat = false;
   if (S.phase === 'claim') S.firstCatch.claim = false;
-  flash(text || ('Not quite. ' + p.hint), 'bad');
+  const check = ['dup','cat','catfix','claim'].includes(S.phase);
+  if (check) coach(3, text || p.hint); else { lightHabit(0); flash(text || ('Not quite. ' + p.hint), 'bad'); }
   if (S.misses >= 2) showHot(p.target);
 }
 
@@ -384,6 +424,7 @@ async function handle(t){
   const ph = S.phase;
   // Always-safe clicks
   if (t === 'home' || t === 'tab-data' || t === 'tab-report') return;
+  if (ph === 'intro') { if (t === 'begin') { $('intro').classList.remove('open'); S.t0 = Date.now(); go('file', 0); } return; }
 
   if (ph === 'file') { if (t === 'file') { clearToast(); $('bs').classList.add('open'); return go('pick'); } return miss(); }
 
@@ -414,8 +455,8 @@ async function handle(t){
   if (ph === 'p1') {
     if (!t.startsWith('p1-')) return miss();
     const txt = stage.querySelector(`[data-t="${t}"]`).textContent; msg('u', txt); clearToast(); S.busy = true;
-    if (t === 'p1-vague') { S.firstPrompt.p1 = false; await aiSay('Happy to help! What should “clean” mean here: dates, amounts, text, duplicates, or all of these?'); S.busy=false; return flash('Vague prompt, vague result. The AI had to ask what you meant. Be specific.', 'bad'); }
-    if (t === 'p1-over') { S.firstPrompt.p1 = false; await aiSay('Done! I made <b>31 changes</b> and drafted a report for Dana.<br><span style="color:#888">(Changes not shown.)</span>'); S.busy=false; return flash('Fast, but now you can’t see or check any of the 31 changes. Work in stages so you can verify each one.', 'bad'); }
+    if (t === 'p1-vague') { S.firstPrompt.p1 = false; await aiSay('Happy to help! What should “clean” mean here: dates, amounts, text, duplicates, or all of these?'); S.busy=false; return coach(1, 'Vague prompt, vague result. The AI had to ask what “clean” means.'); }
+    if (t === 'p1-over') { S.firstPrompt.p1 = false; await aiSay('Done! I made <b>31 changes</b> and drafted a report for Dana.<br><span style="color:#888">(Changes not shown.)</span>'); S.busy=false; return coach(2, 'Fast, but now you can’t see or check any of the 31 changes.'); }
     chips.innerHTML = '';
     const ok = await aiSay('Done. I standardized <b>12 dates</b>, converted <b>12 amounts</b> to numbers, tidied <b>7 product names</b>, formatted it as a table, and removed <b>2 duplicate rows</b>: A-1005 and A-1008.', 1300);
     if (!ok) return;
@@ -451,8 +492,8 @@ async function handle(t){
   if (ph === 'p2') {
     if (!t.startsWith('p2-')) return miss();
     const txt = stage.querySelector(`[data-t="${t}"]`).textContent; msg('u', txt); clearToast(); S.busy = true;
-    if (t === 'p2-vague') { S.firstPrompt.p2 = false; await aiSay('I added <b>8 categories</b>: Tents, Apparel, Socks, Fuel, Lighting, Boots, Shoes, Outerwear.'); S.busy=false; return flash('Without your categories, the AI invents its own. Eight categories won’t match how Dana reports sales. Tell it the list.', 'bad'); }
-    if (t === 'p2-tot') { S.firstPrompt.p2 = false; await aiSay('October total: <b>$1,903.92</b> across 11 orders.'); S.busy=false; return flash('Right number, but Dana asked for totals <b>by category</b>. Ask for what the report needs.', 'bad'); }
+    if (t === 'p2-vague') { S.firstPrompt.p2 = false; await aiSay('I added <b>8 categories</b>: Tents, Apparel, Socks, Fuel, Lighting, Boots, Shoes, Outerwear.'); S.busy=false; return coach(1, 'Without your categories, the AI invents its own. Eight won’t match how Dana reports sales.'); }
+    if (t === 'p2-tot') { S.firstPrompt.p2 = false; await aiSay('October total: <b>$1,903.92</b> across 11 orders.'); S.busy=false; return coach(1, 'Right number, but Dana asked for totals <b>by category</b>. Ask for what the report needs.'); }
     chips.innerHTML = ''; S.fresh = null;
     const ok = await aiSay('Added a <b>Category</b> column for 11 orders and a <b>Total</b> row: 22 items, <b>$1,903.92</b>.', 1200);
     if (!ok) return;
@@ -494,8 +535,8 @@ async function handle(t){
   if (ph === 'p3') {
     if (!t.startsWith('p3-')) return miss();
     const txt = stage.querySelector(`[data-t="${t}"]`).textContent; msg('u', txt); clearToast(); S.busy = true;
-    if (t === 'p3-hype') { S.firstPrompt.p3 = false; await aiSay('October was a <b>record-breaking month</b>! Customers can’t get enough of our outdoor gear, and momentum has never been stronger…'); S.busy=false; return flash('Ask for facts, not spin. Say what to include and that it should only use this data.', 'bad'); }
-    if (t === 'p3-chart') { S.firstPrompt.p3 = false; await aiSay('Here’s a line chart of <b>Qty by Order ID</b>.'); S.busy=false; return flash('Technically a chart, but not one Dana can use. Ask for the specific summary you need.', 'bad'); }
+    if (t === 'p3-hype') { S.firstPrompt.p3 = false; await aiSay('October was a <b>record-breaking month</b>! Customers can’t get enough of our outdoor gear, and momentum has never been stronger…'); S.busy=false; return coach(1, 'Ask for facts, not spin. Say what to include, and to use only this data.'); }
+    if (t === 'p3-chart') { S.firstPrompt.p3 = false; await aiSay('Here’s a line chart of <b>Qty by Order ID</b>.'); S.busy=false; return coach(1, 'Technically a chart, but not one Dana can use. Name the summary you need.'); }
     chips.innerHTML = '';
     const ok = await aiSay('Created a <b>Report</b> sheet with a category summary, a bar chart and a short written summary.', 1300);
     if (!ok) return;
@@ -571,16 +612,16 @@ function start(){
   $('title').textContent = 'Book1 · Spreadsheet'; $('fv').textContent = ''; $('nb').textContent = 'A1';
   $('stabs').innerHTML = '<button class="on" type="button" data-t="tab-data">Sheet1</button>';
   $('result').className = 'result'; $('ctrl').style.display = '';
-  renderGrid(); go('file', 0);
+  renderGrid(); go('file', 0); S.phase = 'intro'; $('intro').classList.add('open'); say('Read the three habits, then press <b>Start the task</b>.');
 }
 stage.addEventListener('click', e => {
   const tgt = e.target.closest('[data-t]');
   if (tgt) return handle(tgt.dataset.t);
-  if (S.phase === 'done' || S.busy) return;
+  if (S.phase === 'done' || S.phase === 'intro' || S.busy) return;
   if (e.target.closest('.msgs,.ph,.chips,.bs-nav,.bs-main,.report,.fbar,.tb,.capbar')) return;
   miss();
 });
-$('showme').onclick = () => { const p = PHASES[S.phase]; if (p) { showHot(p.target); flash(p.hint, 'good'); } };
+$('showme').onclick = () => { if (S.phase === 'intro') return; const p = PHASES[S.phase]; if (p) { showHot(p.target); flash(p.hint, 'good'); } };
 $('restart').onclick = start;
 
 fit(); start();
