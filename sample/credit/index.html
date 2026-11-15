@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Scenario | Adam Thompson Consulting</title>
+<meta name="description" content="A short, original branching scenario showing Adam Thompson Consulting's approach to case-based learning.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B2A4A;--navy-2:#123E6B;--grey:#5E6873;--line:#DDE2E7;--orange:#F07A1A;--orange-ink:#B8530A;--bg:#F4F6F8;--good:#1F7A4D;--good-bg:#E8F5EE;--mid:#8A5A00;--mid-bg:#FFF4DE;--bad:#A3352B;--bad-bg:#FBEAE8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:Figtree,system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--navy)}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top .in{max-width:880px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.top a{text-decoration:none;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px}
+.top svg{width:30px;height:23px}
+.top .lab{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+main{max-width:880px;margin:0 auto;padding:36px 20px 72px}
+.progress{display:flex;gap:8px;margin-bottom:22px}
+.progress span{flex:1;height:6px;border-radius:3px;background:var(--line);transition:background .3s}
+.progress span.done{background:var(--navy)}
+.progress span.now{background:var(--orange)}
+.card{background:#fff;border-radius:20px;border:1px solid var(--line);padding:36px;box-shadow:0 1px 2px rgba(11,42,74,.04)}
+@media (max-width:600px){.card{padding:24px}}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--orange-ink);margin:0 0 10px}
+h1,h2{line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5vw,42px);font-weight:800}
+h2{font-size:clamp(23px,3.5vw,28px);font-weight:800}
+p{margin:0 0 14px}
+.muted{color:var(--grey)}
+.client{display:flex;gap:16px;align-items:flex-start;background:var(--bg);border-radius:16px;padding:18px 20px;margin:18px 0 24px}
+.avatar{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;background:var(--navy-2)}
+.avatar.coach{background:var(--orange);color:var(--navy)}
+.client b{display:block;font-size:15px}
+.client q{display:block;quotes:none;font-size:17px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 24px}
+.facts div{background:var(--bg);border-radius:12px;padding:12px 14px}
+.facts small{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+.facts strong{font-size:19px}
+@media (max-width:600px){.facts{grid-template-columns:1fr}}
+.choices{display:grid;gap:12px;margin-top:8px}
+.choice{all:unset;box-sizing:border-box;display:flex;gap:14px;align-items:flex-start;width:100%;cursor:pointer;border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff;font-size:16.5px;line-height:1.5;transition:border-color .15s,background .15s}
+.choice:hover{border-color:var(--navy)}
+.choice:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.choice .k{flex:none;width:28px;height:28px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:800;font-size:14px}
+.choice[disabled]{cursor:default}
+.choice.picked{border-color:var(--navy);background:#F7F9FB}
+.choice.faded{opacity:.5}
+.fb{margin-top:20px;border-radius:16px;padding:20px 22px;display:none}
+.fb.show{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fb.show{animation:none}}
+.fb.good{background:var(--good-bg)}.fb.mid{background:var(--mid-bg)}.fb.bad{background:var(--bad-bg)}
+.fb .verdict{font-weight:800;margin-bottom:6px}
+.fb.good .verdict{color:var(--good)}.fb.mid .verdict{color:var(--mid)}.fb.bad .verdict{color:var(--bad)}
+.fb .coachrow{display:flex;gap:14px;align-items:flex-start}
+.fb .coachrow .avatar{width:42px;height:42px;font-size:15px}
+.reply{margin-top:16px;padding-top:16px;border-top:1px solid rgba(11,42,74,.1)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:16px;padding:13px 22px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none;margin-top:18px}
+.btn:hover{background:var(--navy-2)}
+.btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.ghost:hover{background:var(--navy);color:#fff}
+.score{display:flex;align-items:baseline;gap:10px;margin:8px 0 18px}
+.score strong{font-size:56px;line-height:1;font-weight:800}
+.score span{color:var(--grey);font-weight:600}
+.recap{display:grid;gap:10px;margin:18px 0 6px;padding:0;list-style:none}
+.recap li{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border-radius:12px;padding:12px 14px;font-size:16px}
+.dot{flex:none;width:12px;height:12px;border-radius:50%;margin-top:7px}
+.dot.good{background:var(--good)}.dot.mid{background:#D99A1C}.dot.bad{background:var(--bad)}
+.foot{margin-top:28px;font-size:14px;color:var(--grey);text-align:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <a href="/"><svg viewBox="0 18 120 92" aria-hidden="true"><path fill="#0B2A4A" d="M14 104 C6 104 4 96 8 90 C12 84 22 80 40 79 C60 78 86 78 100 81 C112 84 116 92 112 99 C109 104 102 104 96 104 Z"/><path fill="#7A8590" d="M30 72 C22 72 21 64 26 59 C31 54 42 52 58 52 C74 52 90 54 94 60 C98 66 94 72 86 72 Z"/><path fill="#F07A1A" d="M39 47 C30 47 30 38 35 33 C41 26 53 23 65 23 C79 23 90 27 91 35 C92 43 87 47 79 47 Z"/></svg>← Back to site</a>
+  <span class="lab">Sample scenario</span>
+</div></div>
+
+<main>
+  <div class="progress" id="progress" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <div class="card" id="stage" tabindex="-1"></div>
+  <p class="foot">An original sample by Adam Thompson Consulting. All people, businesses and figures are fictional.</p>
+  <div class="sr" aria-live="polite" id="live"></div>
+</main>
+
+<script>
+const SCENES = [
+  {
+    title: 'Decision 1 of 3: Open the conversation',
+    client: 'I need my line of credit raised from $25,000 to $60,000. The slow months are killing me and I just need more room.',
+    prompt: 'How do you respond first?',
+    options: [
+      { t: '"Happy to help. Let\'s get the application started and I\'ll send it for approval."', s: 0,
+        fb: 'You went straight to the product. Lena leaves happy today, but nobody knows <em>why</em> she needs the money, so you can\'t tell whether more credit fixes the problem or just makes it bigger.',
+        reply: '"Great, thanks." <span class="muted">(The real issue stays hidden for now.)</span>' },
+      { t: '"Before we talk numbers, what\'s changed in the business over the past year?"', s: 2,
+        fb: 'An open question about the business, not the loan. It invites Lena to tell the story behind the request, which is where the real need usually is.',
+        reply: '"Two big things. We landed a wholesale contract with a café chain last spring: great volume, but they pay on 60-day terms. And flour and butter prices went way up."' },
+      { t: '"What\'s the balance on the line right now? Is it maxed out?"', s: 1,
+        fb: 'Useful information, but a closed, checking-style question this early can feel like an interrogation. You\'ll get a number, not the story behind it.',
+        reply: '"Yes, it\'s maxed. Has been most months since spring." <span class="muted">(A clue, but you don\'t yet know why.)</span>' }
+    ]
+  },
+  {
+    title: 'Decision 2 of 3: Choose what to analyse',
+    client: 'I can send you whatever you need. What do you want to see?',
+    prompt: 'Which information will tell you the most about this request?',
+    options: [
+      { t: 'Last year\'s income statement, to confirm the bakery is profitable.', s: 1,
+        fb: 'Profit matters, but this bakery <em>is</em> profitable. Profit tells you whether the business makes money; it doesn\'t tell you <em>when</em> the cash arrives. That timing is the real question here.',
+        reply: 'The statements show sales up 30% and a healthy profit. So why is the line always maxed? You still have a gap.' },
+      { t: 'Monthly cash flow and an aging of who owes her money, for the past 12 months.', s: 2,
+        fb: 'Spot on. A growing, profitable business that\'s short of cash usually has a timing problem, and this is the data that shows it.',
+        reply: 'Since the wholesale contract began, money owed to the bakery jumped from about $8,000 to $41,000. The café chain is paying in 60–75 days. The line has been maxed every month since.' },
+      { t: 'Her personal credit score and what collateral she could offer.', s: 0,
+        fb: 'You\'ll need these before you lend, but they won\'t explain why she needs the money. Jumping to risk checks first can also signal "I\'m assessing you" rather than "I\'m helping you."',
+        reply: 'Her credit is fine and she has some equipment to pledge. You still don\'t know what\'s driving the shortfall.' }
+    ]
+  },
+  {
+    title: 'Decision 3 of 3: Make your recommendation',
+    client: 'So… can you give me the $60,000?',
+    prompt: 'What do you recommend?',
+    options: [
+      { t: 'Approve the full $60,000 increase as requested.', s: 1,
+        fb: 'It treats the symptom. A bigger line may simply fill up again as her wholesale sales grow, while her biggest customer keeps using her bakery as a free source of credit.',
+        reply: '"Perfect." <span class="muted">(Six months later, the line is maxed again.)</span>' },
+      { t: 'Decline. A line that\'s maxed every month is a red flag.', s: 0,
+        fb: 'A maxed line <em>can</em> signal trouble, but here the business is healthy and growing. Declining without explaining the cause risks losing a good client to a competitor.',
+        reply: '"I\'ll take my business somewhere that understands it."' },
+      { t: 'Offer an increase sized to the receivables gap, and talk about negotiating shorter terms or a deposit with the café chain, and reviewing wholesale pricing.', s: 2,
+        fb: 'This is advice, not just a product. You solve today\'s cash squeeze, address the cause, and give Lena options she hadn\'t considered.',
+        reply: '"Honestly, nobody\'s asked me about the payment terms before. I can definitely push for 30 days."' }
+    ]
+  }
+];
+
+const stage = document.getElementById('stage'), live = document.getElementById('live');
+const bars = [...document.querySelectorAll('#progress span')];
+let step = -1, picks = [];
+
+function setProgress() {
+  bars.forEach((b, i) => { b.className = i < step + 1 ? 'done' : i === step + 1 ? 'now' : ''; });
+}
+function focusStage() { stage.focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+function intro() {
+  step = -1; picks = []; setProgress();
+  stage.innerHTML = `
+    <p class="eyebrow">Branching scenario · about 5 minutes</p>
+    <h1>The Line of Credit Conversation</h1>
+    <p class="muted">You're a business advisor. Lena Moreau owns <b>Hearth &amp; Grain Bakery</b>, a busy neighbourhood bakery she's run for six years. She's booked a meeting with you, and she sounds stressed.</p>
+    <div class="facts">
+      <div><small>Business</small><strong>Bakery, 6 years</strong></div>
+      <div><small>Current line</small><strong>$25,000</strong></div>
+      <div><small>Asking for</small><strong>$60,000</strong></div>
+    </div>
+    <p>You'll make three decisions. After each one, your coach will tell you how it played out and why.</p>
+    <button class="btn" id="go">Start the conversation →</button>`;
+  document.getElementById('go').onclick = () => scene(0);
+}
+
+function scene(i) {
+  step = i; setProgress();
+  const s = SCENES[i];
+  stage.innerHTML = `
+    <p class="eyebrow">${s.title}</p>
+    <div class="client"><div class="avatar" aria-hidden="true">LM</div><div><b>Lena Moreau, owner</b><q>"${s.client}"</q></div></div>
+    <h2>${s.prompt}</h2>
+    <div class="choices" role="group" aria-label="${s.prompt}">
+      ${s.options.map((o, k) => `<button class="choice" data-k="${k}"><span class="k" aria-hidden="true">${'ABC'[k]}</span><span>${o.t}</span></button>`).join('')}
+    </div>
+    <div class="fb" id="fb" tabindex="-1"></div>`;
+  stage.querySelectorAll('.choice').forEach(b => b.onclick = () => choose(i, +b.dataset.k));
+  focusStage();
+}
+
+function choose(i, k) {
+  const s = SCENES[i], o = s.options[k];
+  picks[i] = o.s;
+  stage.querySelectorAll('.choice').forEach(b => { b.disabled = true; b.classList.add(+b.dataset.k === k ? 'picked' : 'faded'); });
+  const cls = o.s === 2 ? 'good' : o.s === 1 ? 'mid' : 'bad';
+  const verdict = o.s === 2 ? 'Strong choice' : o.s === 1 ? 'Partly there' : 'Not quite';
+  const fb = document.getElementById('fb');
+  fb.className = `fb ${cls} show`;
+  fb.innerHTML = `
+    <div class="coachrow"><div class="avatar coach" aria-hidden="true">C</div><div>
+      <div class="verdict">${verdict}</div>
+      <p style="margin:0">${o.fb}</p>
+    </div></div>
+    <div class="reply"><b>What happens next:</b> ${o.reply}</div>
+    <button class="btn" id="next">${i < SCENES.length - 1 ? 'Continue →' : 'See your results →'}</button>`;
+  live.textContent = `${verdict}. ${fb.querySelector('p').textContent}`;
+  document.getElementById('next').onclick = () => i < SCENES.length - 1 ? scene(i + 1) : results();
+  fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function results() {
+  step = 3; setProgress();
+  const total = picks.reduce((a, b) => a + b, 0);
+  const head = total >= 6 ? 'Trusted advisor' : total >= 4 ? 'Good instincts' : 'Room to grow';
+  const msg = total >= 6
+    ? 'You listened first, analysed the right numbers and gave advice that fixes the cause, not just the symptom.'
+    : total >= 4
+    ? 'You got to a reasonable outcome. The strongest advisors go one step further: find the cause, then shape the solution around it.'
+    : 'Lena\'s request sounded simple, but the real issue was cash timing, not credit. Try again and lead with curiosity.';
+  const labels = ['Opening the conversation', 'Choosing what to analyse', 'Making the recommendation'];
+  stage.innerHTML = `
+    <p class="eyebrow">Your results</p>
+    <h1>${head}</h1>
+    <div class="score"><strong>${total}</strong><span>out of 6</span></div>
+    <p class="muted">${msg}</p>
+    <ul class="recap">${labels.map((l, i) => {
+      const c = picks[i] === 2 ? 'good' : picks[i] === 1 ? 'mid' : 'bad';
+      return `<li><span class="dot ${c}" aria-hidden="true"></span><span><b>${l}:</b> ${picks[i] === 2 ? 'strong' : picks[i] === 1 ? 'partly there' : 'missed the mark'}</span></li>`;
+    }).join('')}</ul>
+    <h2 style="margin-top:26px">The takeaway</h2>
+    <p class="muted">A profitable business can still run out of cash. Before deciding <em>how much</em> to lend, find out <em>why</em> the money is needed: listen, look at the timing of cash coming in and going out, then advise on the cause.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      <button class="btn ghost" id="again">Try again</button>
+      <a class="btn" href="/#contact">Build something like this →</a>
+    </div>`;
+  live.textContent = `${head}. You scored ${total} out of 6.`;
+  document.getElementById('again').onclick = intro;
+  focusStage();
+}
+
+intro();
+</script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adam Thompson Consulting | Learning Design &amp; Strategy</title>
+<meta name="description" content="Adam Thompson Consulting designs case-based courses, scenarios, workshops and learning video that build real-world capability. Based in western Québec.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B2A4A; --navy-2:#123E6B; --slate:#7A8590; --grey:#5E6873; --line:#DDE2E7;
+  --orange:#F07A1A; --orange-ink:#B8530A; --bg:#F4F6F8; --white:#fff;
+  --r:18px; --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--white);color:var(--navy);font-family:Figtree,system-ui,-apple-system,Segoe UI,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--navy)}
+img,svg{display:block}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--orange-ink);margin:0 0 14px}
+h1,h2,h3{line-height:1.12;margin:0;letter-spacing:-.015em}
+h2{font-size:clamp(30px,4vw,44px);font-weight:800}
+.lead{font-size:clamp(18px,2vw,21px);color:var(--grey);max-width:640px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-2)}
+.btn-ghost{border:1.5px solid var(--navy);color:var(--navy)}
+.btn-ghost:hover{background:var(--navy);color:#fff}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+
+/* Header */
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.88);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+header.scrolled{border-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;height:76px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand svg{width:40px;height:31px}
+.brand .div{width:1.5px;height:30px;background:#8C97A3}
+.brand .n1{font-size:19px;line-height:1;letter-spacing:-.01em;white-space:nowrap}
+.brand .n1 b{font-weight:800}.brand .n1 span{font-weight:500}
+.brand .n2{font-size:9.5px;letter-spacing:.52em;color:var(--grey);margin-top:4px}
+.links{display:flex;align-items:center;gap:28px}
+.links a{text-decoration:none;font-weight:600;font-size:15px;color:var(--navy)}
+.links a:not(.btn):hover{color:var(--orange-ink)}
+.links .btn{padding:10px 18px;font-size:15px}
+.links a.btn-primary{color:#fff}
+.menu-btn{display:none;background:none;border:0;padding:10px;cursor:pointer;color:var(--navy)}
+@media (max-width:880px){
+  .links{display:none;position:absolute;top:76px;left:0;right:0;flex-direction:column;align-items:flex-start;gap:4px;background:#fff;border-bottom:1px solid var(--line);padding:12px 24px 20px}
+  .links.open{display:flex}
+  .links a{padding:10px 0;font-size:17px}
+  .links .btn{margin-top:8px}
+  .menu-btn{display:block}
+}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#F8F9FB 0%,#ECEFF3 100%);padding:96px 0 104px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(42px,6.2vw,76px);font-weight:800}
+.hero h1 em{font-style:normal;color:var(--orange-ink)}
+.hero .lead{margin:24px 0 36px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px}
+.hero-art{position:relative;aspect-ratio:1/1;max-width:440px;justify-self:end;width:100%}
+.hero-art .mark{position:absolute;inset:8% 6%;}
+.hero-art .mark path{transform-box:fill-box;transform-origin:center}
+.stone{opacity:0;animation:drop .7s cubic-bezier(.2,.8,.2,1) forwards}
+.stone.s1{animation-delay:.1s}.stone.s2{animation-delay:.35s}.stone.s3{animation-delay:.6s}
+@keyframes drop{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.stone{animation:none;opacity:1}}
+.net{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+@media (max-width:880px){.hero{padding:64px 0 72px}.hero-grid{grid-template-columns:1fr}.hero-art{max-width:260px;justify-self:start;order:-1}}
+
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+.strip .wrap{display:flex;flex-wrap:wrap;gap:12px 36px;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px}
+.strip .label{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+.strip ul{display:flex;flex-wrap:wrap;gap:10px 28px;list-style:none;margin:0;padding:0;font-weight:600}
+.strip li{display:flex;align-items:center;gap:10px}
+.strip li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange)}
+
+section{padding:104px 0;scroll-margin-top:76px}
+@media (max-width:880px){section{padding:72px 0}}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:48px}
+.sec-head .lead{margin:16px 0 0}
+
+/* Benefits */
+#value{padding-bottom:40px}
+.benefits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.ben{border-top:3px solid var(--navy);padding-top:22px}
+.ben:nth-child(1){border-color:var(--orange)}
+.ben h3{font-size:21px;font-weight:800;margin-bottom:8px}
+.ben p{margin:0;color:var(--grey);font-size:16px}
+@media (max-width:980px){.benefits{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 20px}}
+@media (max-width:560px){.benefits{grid-template-columns:1fr}}
+
+/* Services */
+.services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.svc{background:var(--bg);border-radius:var(--r);padding:34px;display:flex;flex-direction:column;gap:14px}
+.svc .num{font-size:14px;font-weight:800;letter-spacing:.1em;color:var(--orange-ink)}
+.svc h3{font-size:23px;font-weight:800}
+.svc p{margin:0;color:var(--grey)}
+.svc ul{margin:4px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.svc li{font-size:13.5px;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+@media (max-width:760px){.services{grid-template-columns:1fr}.svc{padding:26px}}
+
+/* AI */
+.ai{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.ai h2 em{font-style:normal;color:var(--orange-ink)}
+.ai .lead{margin-top:18px}
+.ai-list{display:grid;gap:14px}
+.ai-item{display:flex;gap:18px;align-items:flex-start;background:var(--bg);border-radius:var(--r);padding:24px 26px}
+.ai-item .n{flex:none;width:36px;height:36px;border-radius:10px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}
+.ai-item h3{font-size:19px;font-weight:800;margin-bottom:4px}
+.ai-item p{margin:0;color:var(--grey);font-size:16px}
+@media (max-width:880px){.ai{grid-template-columns:1fr;gap:28px}}
+
+/* Work */
+#work{background:var(--navy);color:#fff}
+#work h2{color:#fff}
+#work .eyebrow{color:#FFB37A}
+#work .lead{color:#B8C2CC}
+.proj{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.pc{background:#12355A;border:1px solid #1E4670;border-radius:var(--r);padding:32px;display:flex;flex-direction:column;gap:16px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.tags span{color:#B8C2CC;background:#0B2A4A;border-radius:6px;padding:4px 9px}
+.tags span.o{color:#0B2A4A;background:#FFB37A}
+.pc h3{font-size:23px;font-weight:800;color:#fff}
+.pc .need{margin:0;color:#C9D2DB;font-size:16px}
+.pc .need b,.pc .out b{color:#FFB37A;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
+.did{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.did li{display:grid;grid-template-columns:96px 1fr;gap:12px;color:#DCE3EA;font-size:15.5px;line-height:1.5}
+.did li b{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#1E4670;border-radius:6px;padding:3px 8px;align-self:start;text-align:center}
+.pc .out{margin:auto 0 0;padding-top:16px;border-top:1px solid #1E4670;color:#fff;font-weight:600;font-size:16px}
+.also{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px}
+.also div{border:1px solid #1E4670;border-radius:var(--r);padding:22px 26px;color:#C9D2DB;font-size:15.5px}
+.also b{display:block;color:#fff;font-size:18px;margin-bottom:4px}
+@media (max-width:880px){.proj,.also{grid-template-columns:1fr}.pc{padding:26px}.did li{grid-template-columns:1fr;gap:4px}}
+.note{margin-top:28px;font-size:14px;color:#9FB0C1}
+
+/* Samples */
+.samples{display:grid;grid-template-columns:1.3fr 1fr;gap:20px}
+.feature{position:relative;border-radius:var(--r);overflow:hidden;background:linear-gradient(135deg,#0B2A4A,#123E6B);color:#fff;padding:40px;display:flex;flex-direction:column;gap:16px;min-height:360px}
+.feature h3{font-size:30px;font-weight:800}
+.feature p{margin:0;color:#C9D2DB;max-width:440px}
+.feature .btn{align-self:flex-start;background:var(--orange);color:#0B2A4A;margin-top:auto}
+.feature .btn:hover{background:#FF8F3A}
+.feature .deco{position:absolute;right:-40px;bottom:-30px;width:260px;opacity:.16}
+.soon{display:grid;gap:14px}
+.soon .card{border:1px dashed #B8C2CC;border-radius:var(--r);padding:22px 24px;display:flex;gap:16px;align-items:center}
+.soon .card b{display:block;font-size:17px}
+.soon .card span{color:var(--grey);font-size:15px}
+.soon .tag{flex:none;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-ink);background:#FFF1E6;border-radius:6px;padding:4px 8px;margin-top:2px}
+@media (max-width:880px){.samples{grid-template-columns:1fr}.feature{padding:30px;min-height:0}}
+
+/* Process */
+#approach{background:var(--bg)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;counter-reset:s}
+.step{background:#fff;border-radius:var(--r);padding:28px;position:relative}
+.step::before{counter-increment:s;content:"0" counter(s);font-size:14px;font-weight:800;color:var(--orange-ink);letter-spacing:.08em}
+.step h3{font-size:21px;font-weight:800;margin:10px 0 8px}
+.step p{margin:0;color:var(--grey);font-size:16px}
+@media (max-width:980px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}}
+
+/* About */
+.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+.portrait{aspect-ratio:4/5;border-radius:24px;background:linear-gradient(160deg,#ECEFF3,#DDE2E7);display:grid;place-items:center;position:relative;overflow:hidden}
+.portrait svg{width:46%;opacity:.9}
+.portrait small{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:13px;color:var(--grey)}
+.about p{color:var(--grey);margin:0 0 16px}
+.about .facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding:0;list-style:none}
+.about .facts li{background:var(--bg);border-radius:10px;padding:8px 14px;font-weight:600;font-size:15px}
+@media (max-width:880px){.about{grid-template-columns:1fr;gap:32px}.portrait{max-width:320px}}
+
+/* Contact */
+#contact{padding:0 0 104px}
+.cta{border-radius:28px;background:var(--navy);color:#fff;padding:64px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+.cta h2{color:#fff}
+.cta p{color:#B8C2CC;margin:16px 0 0;font-size:18px}
+.contact-list{display:grid;gap:14px;position:relative;z-index:1}
+.contact-list a{display:flex;align-items:center;gap:14px;background:#12355A;border:1px solid #1E4670;border-radius:14px;padding:18px 20px;color:#fff;text-decoration:none;font-weight:600;font-size:17px;overflow-wrap:anywhere}
+.contact-list a:hover{border-color:var(--orange)}
+.contact-list svg{flex:none;color:var(--orange)}
+@media (max-width:880px){.cta{grid-template-columns:1fr;padding:40px 28px}}
+
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--grey);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Adam Thompson Consulting, home">
+      <svg viewBox="0 18 120 92" aria-hidden="true"><path fill="#0B2A4A" d="M14 104 C6 104 4 96 8 90 C12 84 22 80 40 79 C60 78 86 78 100 81 C112 84 116 92 112 99 C109 104 102 104 96 104 Z"/><path fill="#7A8590" d="M30 72 C22 72 21 64 26 59 C31 54 42 52 58 52 C74 52 90 54 94 60 C98 66 94 72 86 72 Z"/><path fill="#F07A1A" d="M39 47 C30 47 30 38 35 33 C41 26 53 23 65 23 C79 23 90 27 91 35 C92 43 87 47 79 47 Z"/></svg>
+      <span class="div" aria-hidden="true"></span>
+      <span><span class="n1"><span>ADAM</span> <b>THOMPSON</b></span><span class="n2" style="display:block">CONSULTING</span></span>
+    </a>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="links">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="links" id="links" aria-label="Main">
+      <a href="#value">Why</a>
+      <a href="#services">Services</a>
+      <a href="#ai">AI</a>
+      <a href="#work">Work</a>
+      <a href="#samples">Samples</a>
+      <a href="#about">About</a>
+      <a class="btn btn-primary" href="#contact">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="hero-title">
+  <svg class="net" id="net" aria-hidden="true"></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Learning strategy &amp; design</p>
+      <h1 id="hero-title">Help everyone perform like <em>your best people.</em></h1>
+      <p class="lead">Together, we define what great performance looks like. Then I build the learning that helps your whole team get there.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#work">See how it works</a>
+        <a class="btn btn-ghost" href="/sample/">Try a live sample →</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg class="mark" viewBox="0 18 120 92">
+        <path class="stone s3" fill="#0B2A4A" d="M14 104 C6 104 4 96 8 90 C12 84 22 80 40 79 C60 78 86 78 100 81 C112 84 116 92 112 99 C109 104 102 104 96 104 Z"/>
+        <path class="stone s2" fill="#7A8590" d="M30 72 C22 72 21 64 26 59 C31 54 42 52 58 52 C74 52 90 54 94 60 C98 66 94 72 86 72 Z"/>
+        <path class="stone s1" fill="#F07A1A" d="M39 47 C30 47 30 38 35 33 C41 26 53 23 65 23 C79 23 90 27 91 35 C92 43 87 47 79 47 Z"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <span class="label">Recent work across</span>
+    <ul>
+      <li>Commercial banking</li>
+      <li>Healthcare banking</li>
+      <li>Leadership development</li>
+      <li>Adult education</li>
+    </ul>
+  </div>
+</div>
+
+<section id="value" aria-labelledby="value-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">Why it's worth it</p>
+        <h2 id="value-title">Learning that earns its budget</h2>
+      </div>
+    </div>
+    <div class="benefits">
+      <div class="ben reveal"><h3>Changes behaviour</h3><p>People practise real decisions, so new habits show up on the job, not just in a quiz score.</p></div>
+      <div class="ben reveal"><h3>Scales your best thinking</h3><p>How your top performers think becomes the standard across every team and region.</p></div>
+      <div class="ben reveal"><h3>Less time off the job</h3><p>Focused, scenario-based design gets people ready faster. One program went from 4.5 days to about an hour.</p></div>
+      <div class="ben reveal"><h3>Built to last</h3><p>Reusable frameworks, clean source files and French-ready content your team can maintain.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="services" aria-labelledby="svc-title" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">What I do</p>
+        <h2 id="svc-title">From strategy to delivery</h2>
+        <p class="lead">One person, end to end, so the thinking behind the program carries through to what learners see.</p>
+      </div>
+    </div>
+    <div class="services">
+      <article class="svc reveal" style="background:#fff">
+        <span class="num">01</span>
+        <h3>Learning strategy</h3>
+        <p>Define the business goal and the on-the-job behaviours that matter, then choose the format that will actually change them.</p>
+        <ul><li>Needs analysis</li><li>Performance goals</li><li>Program architecture</li></ul>
+      </article>
+      <article class="svc reveal" style="background:#fff">
+        <span class="num">02</span>
+        <h3>Learning design</h3>
+        <p>Build the experience around realistic cases and decisions, not slides of content.</p>
+        <ul><li>Scenario design</li><li>Case files</li><li>Decision frameworks</li></ul>
+      </article>
+      <article class="svc reveal" style="background:#fff">
+        <span class="num">03</span>
+        <h3>Development</h3>
+        <p>Polished courses, video and job aids that are tracked, accessible and tested in your LMS.</p>
+        <ul><li>Storyline 360</li><li>Rise 360</li><li>SCORM</li><li>WCAG 2.1 AA</li><li>AI-assisted video</li></ul>
+      </article>
+      <article class="svc reveal" style="background:#fff">
+        <span class="num">04</span>
+        <h3>Delivery &amp; support</h3>
+        <p>Facilitator guides, pilots, French versions and a clean handover your team can run with.</p>
+        <ul><li>Facilitator guides</li><li>Pilots</li><li>English &amp; French</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="ai" aria-labelledby="ai-title">
+  <div class="wrap ai">
+    <div class="reveal">
+      <p class="eyebrow">How I use AI</p>
+      <h2 id="ai-title">AI makes building fast. <em>Strategy makes it work.</em></h2>
+      <p class="lead">Anyone can generate a course now. The hard part is knowing what to build, for whom, and how it will change what people do.</p>
+    </div>
+    <div class="ai-list">
+      <div class="ai-item reveal"><span class="n" aria-hidden="true">1</span><div><h3>Faster drafts, sooner feedback</h3><p>AI speeds up scripts, scenarios, video and prototypes, so you review working ideas early instead of waiting on storyboards.</p></div></div>
+      <div class="ai-item reveal"><span class="n" aria-hidden="true">2</span><div><h3>Human judgement on every decision</h3><p>Every case, choice and piece of feedback is designed against your goals and checked against your sources.</p></div></div>
+      <div class="ai-item reveal"><span class="n" aria-hidden="true">3</span><div><h3>Your budget goes further</h3><p>Time saved on production goes back into strategy, testing and refinement: the parts that drive results.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2 id="work-title">What I did, and how</h2>
+        <p class="lead">Client details kept confidential.</p>
+      </div>
+    </div>
+    <div class="proj">
+      <article class="pc reveal">
+        <div class="tags"><span class="o">Program redesign</span><span>Commercial banking</span></div>
+        <h3>Turning a 4.5-day workshop into a one-hour course</h3>
+        <p class="need"><b>The need</b>Advisors needed the judgement from a multi-day case without a week away from clients.</p>
+        <ul class="did"><li><b>Strategy</b><span>Identified the decisions that mattered most and cut the rest.</span></li><li><b>Design</b><span>Built a three-step decision framework into four units that follow the real client workflow.</span></li><li><b>Build</b><span>Rise course with scenario checks and a Storyline assessment.</span></li></ul>
+        <p class="out"><b>Outcome</b>The core of a 4.5-day program in about an hour of learner time.</p>
+      </article>
+      <article class="pc reveal">
+        <div class="tags"><span class="o">Case series</span><span>Healthcare banking</span></div>
+        <h3>Practice cases for advising healthcare practices</h3>
+        <p class="need"><b>The need</b>Advisors needed safe practice with a specialised client group before meeting them for real.</p>
+        <ul class="did"><li><b>Strategy</b><span>Paired self-paced cases with a live workshop for the most complex clients.</span></li><li><b>Design</b><span>Three fictional practices, each with 5–8 key decisions and a just-in-time coach.</span></li><li><b>Build</b><span>One reusable Storyline framework across every case, with French to follow.</span></li></ul>
+        <p class="out"><b>Outcome</b>Advisors rehearse real conversations, and the framework scales to new cases.</p>
+      </article>
+      <article class="pc reveal">
+        <div class="tags"><span class="o">Course series</span><span>Commercial banking</span></div>
+        <h3>Financial analysis for relationship managers</h3>
+        <p class="need"><b>The need</b>New relationship managers and interns needed to read financials like experienced lenders.</p>
+        <ul class="did"><li><b>Design</b><span>Four scenarios built around fictional companies with realistic statements.</span></li><li><b>Build</b><span>Interactive modules on cash flow, ratios, EBITDA and lending risk signals.</span></li></ul>
+        <p class="out"><b>Outcome</b>Analysis practised on realistic companies, not abstract formulas.</p>
+      </article>
+      <article class="pc reveal">
+        <div class="tags"><span class="o">Course + video</span><span>Financial services</span></div>
+        <h3>A negotiation program that works and sticks</h3>
+        <p class="need"><b>The need</b>A large course had to run reliably in the LMS and stay useful after launch.</p>
+        <ul class="did"><li><b>Build</b><span>Fixed tracking and resume issues and ran a full QA pass.</span></li><li><b>Design</b><span>A cinematic video that brings the negotiation framework to life.</span></li><li><b>Support</b><span>Bilingual, accessible guides and one-page job aids.</span></li></ul>
+        <p class="out"><b>Outcome</b>A dependable course plus tools people keep using after it ends.</p>
+      </article>
+    </div>
+    <div class="also">
+      <div class="reveal"><b>Leader coaching workshop</b>Two-day facilitated program with a facilitator guide and coaching tool.</div>
+      <div class="reveal"><b>Animated advisor video series</b>A recurring character models real client conversations.</div>
+    </div>
+  </div>
+</section>
+
+<section id="samples" aria-labelledby="samples-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">Samples</p>
+        <h2 id="samples-title">Try it yourself</h2>
+      </div>
+    </div>
+    <div class="samples">
+      <a class="feature reveal" href="/sample/" style="text-decoration:none">
+        <p class="eyebrow" style="color:#FFB37A;margin:0">Live sample · 5 minutes</p>
+        <h3>The Check-In</h3>
+        <p>Give feedback to a teammate who's missed deadlines. Video-call format, talking avatar, live coaching.</p>
+        <span class="btn">Join the call →</span>
+        <svg class="deco" viewBox="0 18 120 92" aria-hidden="true"><path fill="#fff" d="M14 104 C6 104 4 96 8 90 C12 84 22 80 40 79 C60 78 86 78 100 81 C112 84 116 92 112 99 C109 104 102 104 96 104 Z"/><path fill="#fff" d="M30 72 C22 72 21 64 26 59 C31 54 42 52 58 52 C74 52 90 54 94 60 C98 66 94 72 86 72 Z"/><path fill="#F07A1A" d="M39 47 C30 47 30 38 35 33 C41 26 53 23 65 23 C79 23 90 27 91 35 C92 43 87 47 79 47 Z"/></svg>
+      </a>
+      <div class="soon">
+        <a class="card reveal" href="/sample/credit/" style="text-decoration:none;border-style:solid"><span class="tag" style="background:#E8F5EE;color:#1F7A4D">Live</span><div><b>The Line of Credit Conversation</b></div></a>
+        <div class="card reveal"><span class="tag">Coming soon</span><div><b>Branching scenario in Storyline</b></div></div>
+        <div class="card reveal"><span class="tag">Coming soon</span><div><b>Case file explorer</b></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" aria-labelledby="about-title">
+  <div class="wrap about">
+    <div class="portrait reveal">
+      <svg viewBox="0 18 120 92" aria-hidden="true"><path fill="#0B2A4A" d="M14 104 C6 104 4 96 8 90 C12 84 22 80 40 79 C60 78 86 78 100 81 C112 84 116 92 112 99 C109 104 102 104 96 104 Z"/><path fill="#7A8590" d="M30 72 C22 72 21 64 26 59 C31 54 42 52 58 52 C74 52 90 54 94 60 C98 66 94 72 86 72 Z"/><path fill="#F07A1A" d="M39 47 C30 47 30 38 35 33 C41 26 53 23 65 23 C79 23 90 27 91 35 C92 43 87 47 79 47 Z"/></svg>
+      <small>[Your photo here]</small>
+    </div>
+    <div class="reveal">
+      <p class="eyebrow">About</p>
+      <h2 id="about-title">Hi, I'm Adam.</h2>
+      <p style="margin-top:20px">Learning designer in western Québec with a background in adult education, now building learning for corporate teams, most recently at one of Canada's largest banks.</p>
+      <p>Solo practice: you work directly with the person designing and building your project.</p>
+      <ul class="facts">
+        <li>Storyline &amp; Rise 360</li><li>SCORM &amp; LMS testing</li><li>Accessibility (WCAG 2.1 AA)</li><li>English &amp; French projects</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2 id="contact-title">Have a project in mind?</h2>
+        <p>Let's talk about what you're building.</p>
+      </div>
+      <div class="contact-list">
+        <a href="mailto:adam@athompsonconsulting.ca"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>adam@athompsonconsulting.ca</a>
+        <a href="tel:+18197901496"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>(819) 790-1496</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Adam Thompson Consulting · Building Capability That Lasts</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+// Header border on scroll
+const hdr = document.querySelector('header');
+const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 8);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+// Mobile menu
+const btn = document.querySelector('.menu-btn'), links = document.getElementById('links');
+btn.addEventListener('click', () => { const o = links.classList.toggle('open'); btn.setAttribute('aria-expanded', o); });
+links.addEventListener('click', e => { if (e.target.closest('a')) { links.classList.remove('open'); btn.setAttribute('aria-expanded', false); } });
+
+// Reveal on scroll
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Faint node network in the hero, kept to the edges
+(function () {
+  const svg = document.getElementById('net'); if (!svg) return;
+  const draw = () => {
+    const r = svg.getBoundingClientRect(), W = r.width, H = r.height;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    const pts = [];
+    for (let i = 0; i < 900 && pts.length < Math.round(W / 22); i++) {
+      const x = rnd() * W, y = rnd() * H;
+      const dx = (x - W * .32) / (W * .42), dy = (y - H * .5) / (H * .55);
+      if (Math.hypot(dx, dy) < 1) continue;
+      if (pts.some(p => Math.hypot(p[0] - x, p[1] - y) < 70)) continue;
+      pts.push([x, y, rnd() < .08]);
+    }
+    let out = '';
+    pts.forEach((a, i) => pts.map((b, j) => [j, Math.hypot(a[0] - b[0], a[1] - b[1])]).filter(e => e[0] > i && e[1] < 170).sort((p, q) => p[1] - q[1]).slice(0, 2)
+      .forEach(([j, d]) => out += `<line x1="${a[0]}" y1="${a[1]}" x2="${pts[j][0]}" y2="${pts[j][1]}" stroke="#0B2A4A" stroke-opacity="${(.12 * (1 - d / 190)).toFixed(3)}"/>`));
+    pts.forEach(p => out += p[2] ? `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#F07A1A" fill-opacity=".6"/>` : `<circle cx="${p[0]}" cy="${p[1]}" r="2.4" fill="#0B2A4A" fill-opacity=".18"/>`);
+    svg.innerHTML = out;
+  };
+  draw(); let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
+})();
+</script>
+</body>
+</html>
