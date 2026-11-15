@@ -3,126 +3,166 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Software Simulation | Adam Thompson Consulting</title>
-<meta name="description" content="An original software simulation sample: flag overdue invoices with conditional formatting, in Watch, Try and Test modes.">
+<title>From Raw Data to Report | Adam Thompson Consulting</title>
+<meta name="description" content="An original software simulation: turn a messy CSV export into a clean, categorized report with an AI assistant, and catch its mistakes along the way.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0B2A4A;--navy-2:#123E6B;--grey:#5E6873;--line:#DDE2E7;--orange:#F07A1A;--orange-ink:#B8530A;--bg:#F4F6F8;--good:#1F7A4D;--good-bg:#E8F5EE;--bad:#A3352B;--bad-bg:#FBEAE8;
-  --xl:#1D6F42;--xl-2:#185C37;--xl-tint:#E6F2EA;--cellsel:#CFE6D7}
+  --xl:#1D6F42;--xl-2:#185C37;--ai:#5B4BC4;--ai-bg:#F1EFFC}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--navy);font-family:Figtree,system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:var(--navy)}
 :focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
 .top{background:#fff;border-bottom:1px solid var(--line)}
-.top .in{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.top .in{max-width:1280px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}
 .top a{text-decoration:none;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px}
 .top svg{width:30px;height:23px}
 .top .lab{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
-main{max-width:1240px;margin:0 auto;padding:26px 20px 56px}
+main{max-width:1280px;margin:0 auto;padding:26px 20px 56px}
 .eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--orange-ink);margin:0 0 8px}
 h1{font-size:clamp(28px,4.5vw,40px);font-weight:800;line-height:1.12;margin:0 0 8px;letter-spacing:-.01em}
-.sub{color:var(--grey);margin:0 0 20px;max-width:760px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
-@media (max-width:1020px){.layout{grid-template-columns:1fr}}
-
-/* Panel */
+.sub{color:var(--grey);margin:0 0 20px;max-width:780px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+@media (max-width:1060px){.layout{grid-template-columns:1fr}}
 .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
-.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:18px}
-.modes button{all:unset;box-sizing:border-box;text-align:center;padding:9px 6px;border-radius:9px;font-weight:700;font-size:15px;cursor:pointer;color:var(--grey)}
-.modes button[aria-pressed="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(11,42,74,.12)}
-.modes button:focus-visible{outline:3px solid var(--orange)}
-.mdesc{font-size:14.5px;color:var(--grey);margin:0 0 16px}
-.steps{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:8px;counter-reset:s}
-.steps li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--grey);padding:8px 10px;border-radius:10px}
-.steps li::before{counter-increment:s;content:counter(s);flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--grey);display:grid;place-items:center;font-size:12px;font-weight:800}
-.steps li.now{background:#FFF6EE;color:var(--navy);font-weight:600}
+.brief{background:var(--navy);color:#fff;border-radius:14px;padding:14px 16px;font-size:15px;margin-bottom:16px}
+.brief b{color:#FFB37A}
+.brief small{display:block;opacity:.7;font-size:12.5px;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.steps{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:4px;counter-reset:s}
+.steps li{display:flex;gap:10px;align-items:center;font-size:14.5px;color:var(--grey);padding:6px 8px;border-radius:9px}
+.steps li::before{counter-increment:s;content:counter(s);flex:none;width:21px;height:21px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:11.5px;font-weight:800}
+.steps li.ck{font-weight:600}
+.steps li.ck::after{content:"✦";margin-left:auto;font-size:11px;color:var(--ai);background:var(--ai-bg);width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none}
+.steps li.now{background:#FFF6EE;color:var(--navy);font-weight:700}
 .steps li.now::before{background:var(--orange);color:#fff}
 .steps li.done{color:var(--navy)}
 .steps li.done::before{content:"✓";background:var(--good);color:#fff}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:15.5px;padding:11px 18px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:15px;padding:10px 17px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none}
 .btn:hover{background:var(--navy-2)}
 .btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
 .btn.ghost:hover{background:var(--navy);color:#fff}
 .btn.orange{background:var(--orange);color:#081F38}
 .row{display:flex;flex-wrap:wrap;gap:10px}
-.result{display:none;margin-top:6px}
+.result{display:none}
 .result.show{display:block}
-.score{font-size:44px;font-weight:800;line-height:1;margin:4px 0 8px}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 12px}
+.score div{background:var(--bg);border-radius:12px;padding:10px 12px}
+.score b{display:block;font-size:28px;font-weight:800;line-height:1.1}
+.score span{font-size:13px;color:var(--grey)}
+.small{font-size:14px;color:var(--grey);margin:0 0 12px}
 
-/* Stage scaler */
-.stagewrap{position:relative;width:100%;}
+/* Stage */
 .stagebox{position:relative;width:100%;overflow:hidden;border-radius:14px;box-shadow:0 10px 30px rgba(11,42,74,.16);background:#fff}
-#stage{position:absolute;top:0;left:0;width:960px;height:600px;transform-origin:0 0;font-family:"Segoe UI",system-ui,sans-serif;font-size:13px;color:#222;background:#fff;user-select:none}
-
-/* App chrome */
-.tb{height:34px;background:var(--xl);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12.5px}
+#stage{position:absolute;top:0;left:0;width:980px;height:640px;transform-origin:0 0;font-family:"Segoe UI",system-ui,sans-serif;font-size:13px;color:#222;background:#fff;user-select:none}
+.tb{height:32px;background:var(--xl);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12.5px}
 .tb .dots{display:flex;gap:6px}.tb .dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35)}
 .tabs{display:flex;gap:2px;background:var(--xl);padding:0 8px}
-.tabs span{padding:6px 14px;color:#E6F2EA;font-size:12.5px;border-radius:4px 4px 0 0}
-.tabs span.on{background:#F3F3F3;color:#111;font-weight:600}
-.ribbon{height:86px;background:#F3F3F3;border-bottom:1px solid #D4D4D4;display:flex;gap:4px;padding:6px 8px}
+.tabs button{all:unset;padding:5px 14px;color:#E6F2EA;font-size:12.5px;border-radius:4px 4px 0 0;cursor:pointer}
+.tabs button.on{background:#F3F3F3;color:#111;font-weight:600}
+.tabs button:hover:not(.on){background:rgba(255,255,255,.12)}
+.ribbon{height:72px;background:#F3F3F3;border-bottom:1px solid #D4D4D4;display:flex;gap:4px;padding:6px 8px}
 .grp{display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid #D9D9D9;padding:0 10px}
 .grp .items{display:flex;gap:4px;align-items:flex-start}
-.grp .gl{font-size:11px;color:#666;text-align:center;padding-bottom:2px}
-.rb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 6px;border-radius:4px;font-size:11.5px;color:#222;cursor:pointer;border:1px solid transparent;background:none;font-family:inherit;line-height:1.15;text-align:center}
+.grp .gl{font-size:11px;color:#666;text-align:center}
+.rb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 6px;border-radius:4px;font-size:11.5px;color:#222;cursor:pointer;border:1px solid transparent;background:none;font-family:inherit;line-height:1.15;text-align:center}
 .rb:hover{background:#E1E1E1}
-.rb .ic{width:26px;height:26px;border-radius:4px;display:grid;place-items:center}
-.rb.small{flex-direction:row;padding:3px 6px}
-.rb.small .ic{width:18px;height:18px}
-.fbar{height:28px;display:flex;align-items:center;border-bottom:1px solid #D4D4D4;background:#fff}
-.namebox{width:80px;height:100%;border-right:1px solid #D4D4D4;display:flex;align-items:center;padding-left:8px;font-size:12px}
+.rb .ic{width:24px;height:24px;border-radius:4px;display:grid;place-items:center}
+.rb.ai .ic{background:linear-gradient(135deg,#7B6CF0,#4FA3E0);color:#fff;font-size:15px}
+.rb.ai.on{background:var(--ai-bg);border-color:#CFC8F5}
+.fbar{height:26px;display:flex;align-items:center;border-bottom:1px solid #D4D4D4;background:#fff}
+.namebox{width:76px;height:100%;border-right:1px solid #D4D4D4;display:flex;align-items:center;padding-left:8px;font-size:12px}
 .fx{padding:0 10px;color:#666;font-style:italic;border-right:1px solid #D4D4D4;height:100%;display:flex;align-items:center}
-.fval{padding-left:10px;font-size:12.5px}
-.grid{position:relative;display:grid;grid-template-columns:40px 110px 170px 120px 130px 130px 1fr;font-size:12.5px}
-.grid div{height:26px;border-right:1px solid #E1E1E1;border-bottom:1px solid #E1E1E1;display:flex;align-items:center;padding:0 8px;white-space:nowrap;overflow:hidden}
-.grid .h{background:#F3F3F3;color:#555;justify-content:center;font-size:12px}
-.grid .h.col{cursor:pointer}
-.grid .h.col:hover{background:#E4E4E4}
-.grid .h.sel{background:#D3E8DB;color:var(--xl-2);font-weight:700;border-bottom:2px solid var(--xl)}
-.grid .rh{background:#F3F3F3;color:#555;justify-content:center}
-.grid .th{font-weight:700;background:#FAFAFA}
+.fval{padding-left:10px;font-size:12.5px;white-space:nowrap;overflow:hidden}
+.work{position:absolute;top:158px;left:0;right:0;bottom:102px;display:flex}
+.sheet{position:relative;flex:1;overflow:hidden}
+.grid{display:grid;grid-template-columns:34px 76px 92px 148px 42px 86px 112px 1fr;font-size:12.5px}
+.grid div{height:24px;border-right:1px solid #E6E6E6;border-bottom:1px solid #E6E6E6;display:flex;align-items:center;padding:0 7px;white-space:pre;overflow:hidden}
+.grid .h,.grid .rh{background:#F3F3F3;color:#555;justify-content:center;font-size:11.5px}
 .grid .num{justify-content:flex-end}
-.grid .sel{background:var(--cellsel)}
-.grid .hl{background:#FFC7CE !important;color:#9C0006;font-weight:600}
-.sheettabs{position:absolute;left:0;right:0;bottom:0;height:28px;background:#F3F3F3;border-top:1px solid #D4D4D4;display:flex;align-items:center;gap:2px;padding-left:40px;font-size:12px}
-.sheettabs span{padding:4px 14px;background:#fff;border-bottom:2px solid var(--xl);color:var(--xl-2);font-weight:600}
+.grid .th{background:var(--xl);color:#fff;font-weight:700}
+.grid .band{background:#EEF6F1}
+.grid .tot{font-weight:800;border-top:2px solid var(--xl);background:#fff}
+.grid .flag{background:#FFF1C7 !important}
+.grid .new{background:#DDF3E4 !important}
+.grid .cat{cursor:pointer}
+.grid .cat:hover{outline:2px solid #B9B1EE;outline-offset:-2px}
+.grid .wrong{background:#FDECEA !important;color:#9C0006}
+.sheettabs{position:absolute;left:0;right:0;bottom:0;height:28px;background:#F3F3F3;border-top:1px solid #D4D4D4;display:flex;align-items:center;gap:2px;padding-left:34px;font-size:12px}
+.sheettabs button{all:unset;padding:4px 14px;cursor:pointer;color:#444}
+.sheettabs button.on{background:#fff;border-bottom:2px solid var(--xl);color:var(--xl-2);font-weight:600}
 
-/* Menus & dialog */
-.menu{position:absolute;background:#fff;border:1px solid #C8C8C8;box-shadow:0 6px 18px rgba(0,0,0,.18);padding:4px 0;min-width:210px;z-index:5;display:none}
-.menu.open{display:block}
-.mi{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:6px 14px;cursor:pointer;font-size:12.5px;width:100%;border:0;background:none;font-family:inherit;text-align:left;color:#222}
-.mi:hover,.mi.hov{background:#E6F2EA}
-.msep{height:1px;background:#E1E1E1;margin:4px 0}
-.dlg{position:absolute;left:300px;top:200px;width:380px;background:#fff;border:1px solid #BDBDBD;box-shadow:0 12px 32px rgba(0,0,0,.25);z-index:6;display:none}
-.dlg.open{display:block}
-.dlg .dt{background:#F3F3F3;padding:8px 12px;font-weight:600;font-size:12.5px;display:flex;justify-content:space-between;border-bottom:1px solid #D4D4D4}
-.dlg .db{padding:14px}
-.dlg label{display:block;font-size:12.5px;margin-bottom:6px}
-.dlg .f{display:flex;gap:8px;align-items:center}
-.dlg input{width:120px;height:26px;border:1px solid #999;padding:0 6px;font:inherit;font-size:12.5px}
-.dlg input:focus{outline:2px solid var(--xl)}
-.dlg select{height:26px;font:inherit;font-size:12px;border:1px solid #999}
-.dlg .bt{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-.dlg .bt button{min-width:72px;height:26px;font:inherit;font-size:12.5px;border:1px solid #999;background:#F3F3F3;cursor:pointer}
-.dlg .bt button.pri{border-color:var(--xl);background:var(--xl);color:#fff}
+/* Backstage open */
+.backstage{position:absolute;top:32px;left:0;right:0;bottom:0;background:#fff;z-index:8;display:none}
+.backstage.open{display:flex}
+.bs-nav{width:180px;background:var(--xl);color:#fff;padding:18px 0}
+.bs-nav div{padding:9px 22px;font-size:13.5px}
+.bs-nav div.on{background:var(--xl-2);font-weight:700}
+.bs-main{flex:1;padding:26px 34px}
+.bs-main h2{font-weight:300;font-size:30px;margin:0 0 18px}
+.file{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:0;background:none;font:inherit;font-size:13px;text-align:left;cursor:pointer;border-radius:4px}
+.file:hover{background:#E6F2EA}
+.file .fi{width:28px;height:34px;border-radius:3px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:700}
+.file small{display:block;color:#777;font-size:11.5px}
 
-/* Hotspot, cursor, caption */
-.hot{position:absolute;border:2.5px solid var(--orange);border-radius:6px;box-shadow:0 0 0 4px rgba(240,122,26,.25);pointer-events:none;z-index:9;display:none;animation:pulse 1.2s infinite}
+/* Assistant pane */
+.pane{width:0;overflow:hidden;border-left:1px solid #D4D4D4;background:#FBFAFF;display:flex;flex-direction:column;transition:width .3s}
+.pane.open{width:340px}
+.ph{flex:none;height:38px;display:flex;align-items:center;gap:8px;padding:0 14px;font-weight:700;font-size:13.5px;border-bottom:1px solid #E5E1F7;color:#2A2160;white-space:nowrap}
+.ph i{font-style:normal;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#7B6CF0,#4FA3E0);color:#fff;display:grid;place-items:center;font-size:13px}
+.msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;width:340px}
+.m{max-width:92%;padding:8px 11px;border-radius:12px;font-size:12.8px;line-height:1.45}
+.m.u{align-self:flex-end;background:#2A2160;color:#fff;border-bottom-right-radius:4px}
+.m.a{align-self:flex-start;background:#fff;border:1px solid #E2DDF7;border-bottom-left-radius:4px}
+.m.a b{color:#2A2160}
+.m.typing{color:#8A84B0;font-style:italic}
+.chips{flex:none;padding:10px 12px;border-top:1px solid #E5E1F7;background:#fff;width:340px}
+.chips p{margin:0 0 7px;font-size:11.5px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.chip{display:block;width:100%;text-align:left;border:1px solid #D7D1F3;background:#fff;border-radius:10px;padding:7px 10px;margin-bottom:6px;font:inherit;font-size:12.5px;line-height:1.35;color:#2A2160;cursor:pointer}
+.chip:hover{background:var(--ai-bg);border-color:#A99FEA}
+.chip.act{background:#2A2160;color:#fff;border-color:#2A2160;text-align:center;font-weight:600}
+.chip.act:hover{background:#3A2F80}
+.chip.alt{text-align:center;font-weight:600}
+
+/* Category picker */
+.pick{position:absolute;z-index:7;background:#fff;border:1px solid #C8C8C8;box-shadow:0 6px 18px rgba(0,0,0,.18);padding:4px 0;min-width:130px;display:none}
+.pick.open{display:block}
+.pick button{display:block;width:100%;border:0;background:none;text-align:left;padding:5px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+.pick button:hover{background:#E6F2EA}
+
+/* Report sheet */
+.report{position:absolute;inset:0;background:#fff;padding:14px 22px;display:none;overflow:hidden}
+.report.open{display:block}
+.report h3{margin:0 0 2px;font-size:19px;color:var(--xl-2)}
+.report .rs{color:#777;font-size:12px;margin-bottom:12px}
+.rgrid{display:grid;grid-template-columns:270px 1fr;gap:20px;align-items:start}
+.rt{width:100%;border-collapse:collapse;font-size:12.5px}
+.rt th{background:var(--xl);color:#fff;text-align:left;padding:5px 8px}
+.rt td{padding:5px 8px;border-bottom:1px solid #E6E6E6}
+.rt td.n,.rt th.n{text-align:right}
+.rt tr.t td{font-weight:800;border-top:2px solid var(--xl)}
+.claims{margin-top:14px;border-top:1px solid #E6E6E6;padding-top:10px}
+.claims p.lbl{margin:0 0 6px;font-size:11.5px;font-weight:700;color:var(--ai);text-transform:uppercase;letter-spacing:.05em}
+.claim{display:block;width:100%;text-align:left;border:1px dashed transparent;background:none;font:inherit;font-size:13.5px;padding:4px 8px;border-radius:6px;cursor:pointer;color:#222}
+.claim:hover{border-color:#B9B1EE;background:var(--ai-bg)}
+.claim.gone{text-decoration:line-through;color:#A3352B;background:#FDECEA;cursor:default}
+
+/* Guidance */
+.capbar{position:absolute;left:0;right:0;bottom:28px;height:74px;z-index:15;background:var(--navy);color:#fff;font-family:Figtree,system-ui,sans-serif;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 10px 8px 0}
+.capbar #cap{position:relative;font-size:15px;line-height:1.35;padding-left:72px;display:flex;align-items:center}
+.capbar #cap::before{content:"TASK";position:absolute;left:18px;font-size:11px;font-weight:800;letter-spacing:.12em;color:#FFB37A}
+.capbar #cap b{color:#FFB37A}
+.toast{font-size:13.5px;line-height:1.35;padding:7px 12px;border-radius:9px;display:none;align-items:center}
+.toast.bad{display:flex;background:var(--bad-bg);color:var(--bad)}
+.toast.good{display:flex;background:var(--good-bg);color:var(--good)}
+.hot{position:absolute;border:2.5px solid var(--orange);border-radius:6px;box-shadow:0 0 0 4px rgba(240,122,26,.25);pointer-events:none;z-index:14;display:none;animation:pulse 1.2s infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 9px rgba(240,122,26,.08)}}
-.cursor{position:absolute;width:22px;height:22px;z-index:20;pointer-events:none;transition:left .8s cubic-bezier(.4,.1,.2,1),top .8s cubic-bezier(.4,.1,.2,1);display:none}
-.click{position:absolute;width:30px;height:30px;border-radius:50%;border:3px solid var(--orange);z-index:19;pointer-events:none;opacity:0}
-.click.go{animation:ck .5s ease-out}
-@keyframes ck{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.4)}}
-.cap{position:absolute;z-index:15;max-width:270px;background:var(--navy);color:#fff;font-family:Figtree,system-ui,sans-serif;font-size:14px;line-height:1.4;padding:10px 13px;border-radius:10px;box-shadow:0 8px 20px rgba(11,42,74,.3);display:none}
-.cap b{color:#FFB37A}
-.toast{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);z-index:16;font-family:Figtree,system-ui,sans-serif;font-size:14px;padding:9px 14px;border-radius:10px;display:none;max-width:80%;text-align:center}
-.toast.bad{display:block;background:var(--bad-bg);color:var(--bad);border:1px solid #F0C2BD}
-.toast.good{display:block;background:var(--good-bg);color:var(--good);border:1px solid #BFE3CE}
-@media (prefers-reduced-motion:reduce){.hot{animation:none}.cursor{transition:none}}
+@media (prefers-reduced-motion:reduce){.hot{animation:none}.pane{transition:none}}
 .foot{margin-top:22px;font-size:14px;color:var(--grey);text-align:center}
+.mob{display:none;font-size:14px;color:var(--orange-ink);margin:0 0 12px;font-weight:600}
+@media (max-width:700px){.mob{display:block}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -133,296 +173,417 @@ h1{font-size:clamp(28px,4.5vw,40px);font-weight:800;line-height:1.12;margin:0 0 
 </div></div>
 
 <main>
-  <p class="eyebrow">Software simulation · about 3 minutes</p>
-  <h1>Flag overdue invoices in a spreadsheet</h1>
-  <p class="sub">A common Excel task, taught the way people actually learn software: watch it once, try it with help, then prove you can do it on your own.</p>
+  <p class="eyebrow">Software simulation with AI · about 4 minutes</p>
+  <h1>From raw data to report, with AI</h1>
+  <p class="sub">Turn a messy sales export into a clean report your manager can use. The AI assistant does the heavy lifting. Your job is to ask well and catch its mistakes before they reach anyone else.</p>
+  <p class="mob">Best on a laptop or tablet.</p>
 
   <div class="layout">
-    <div class="stagewrap">
-      <div class="stagebox" id="box">
-        <div id="stage" aria-label="Simulated spreadsheet application">
-          <div class="tb"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Invoices.xlsx · Spreadsheet</span><span></span></div>
-          <div class="tabs" aria-hidden="true"><span>File</span><span class="on">Home</span><span>Insert</span><span>Page Layout</span><span>Formulas</span><span>Data</span><span>View</span></div>
-          <div class="ribbon">
-            <div class="grp"><div class="items">
-              <button class="rb" data-t="paste" type="button"><span class="ic" style="background:#E8E8E8">📋</span>Paste</button>
-            </div><div class="gl">Clipboard</div></div>
-            <div class="grp"><div class="items">
-              <button class="rb small" data-t="bold" type="button"><span class="ic"><b>B</b></span></button>
-              <button class="rb small" data-t="italic" type="button"><span class="ic"><i>I</i></span></button>
-              <button class="rb small" data-t="under" type="button"><span class="ic"><u>U</u></span></button>
-            </div><div class="gl">Font</div></div>
-            <div class="grp"><div class="items">
-              <button class="rb small" data-t="align" type="button"><span class="ic">≡</span>Align</button>
-              <button class="rb small" data-t="wrap" type="button"><span class="ic">↵</span>Wrap</button>
-            </div><div class="gl">Alignment</div></div>
-            <div class="grp"><div class="items">
-              <button class="rb" data-t="cf" id="cfBtn" type="button"><span class="ic" style="background:#FDE2E4;color:#9C0006;font-weight:800">▦</span>Conditional<br>Formatting ▾</button>
-              <button class="rb" data-t="table" type="button"><span class="ic" style="background:#DCEEFF">▤</span>Format as<br>Table ▾</button>
-              <button class="rb" data-t="styles" type="button"><span class="ic" style="background:#FFF2CC">▣</span>Cell<br>Styles ▾</button>
-            </div><div class="gl">Styles</div></div>
-            <div class="grp" style="border:0"><div class="items">
-              <button class="rb" data-t="sort" type="button"><span class="ic" style="background:#E8E8E8">⇅</span>Sort &amp;<br>Filter ▾</button>
-            </div><div class="gl">Editing</div></div>
-          </div>
-          <div class="fbar"><div class="namebox" id="nb">A1</div><div class="fx">fx</div><div class="fval" id="fv">Invoice #</div></div>
-          <div class="grid" id="grid"></div>
-          <div class="sheettabs" aria-hidden="true"><span>Invoices</span></div>
+    <div class="stagebox" id="box">
+      <div id="stage" aria-label="Simulated spreadsheet application with an AI assistant">
+        <div class="tb"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="title">Book1 · Spreadsheet</span><span></span></div>
+        <div class="tabs"><button data-t="file" type="button">File</button><button class="on" data-t="home" type="button">Home</button><button data-t="insert" type="button">Insert</button><button data-t="data" type="button">Data</button><button data-t="view" type="button">View</button></div>
+        <div class="ribbon">
+          <div class="grp"><div class="items"><button class="rb" data-t="paste" type="button"><span class="ic" style="background:#E8E8E8">📋</span>Paste</button></div><div class="gl">Clipboard</div></div>
+          <div class="grp"><div class="items">
+            <button class="rb" data-t="bold" type="button"><span class="ic"><b>B</b></span>Bold</button>
+            <button class="rb" data-t="numfmt" type="button"><span class="ic" style="background:#E8E8E8">$</span>Number</button>
+          </div><div class="gl">Format</div></div>
+          <div class="grp"><div class="items">
+            <button class="rb" data-t="table" type="button"><span class="ic" style="background:#DCEEFF">▤</span>Format as Table</button>
+            <button class="rb" data-t="sort" type="button"><span class="ic" style="background:#E8E8E8">⇅</span>Sort &amp; Filter</button>
+            <button class="rb" data-t="sum" type="button"><span class="ic" style="background:#E8E8E8">Σ</span>AutoSum</button>
+          </div><div class="gl">Editing</div></div>
+          <div class="grp" style="border:0"><div class="items">
+            <button class="rb ai" data-t="assistant" id="aiBtn" type="button"><span class="ic">✦</span>Assistant</button>
+          </div><div class="gl">AI</div></div>
+        </div>
+        <div class="fbar"><div class="namebox" id="nb">A1</div><div class="fx">fx</div><div class="fval" id="fv"></div></div>
 
-          <div class="menu" id="cfMenu" role="menu">
-            <button class="mi" data-t="hcr" role="menuitem" type="button">Highlight Cells Rules <span>▸</span></button>
-            <button class="mi" data-t="topb" role="menuitem" type="button">Top/Bottom Rules <span>▸</span></button>
-            <button class="mi" data-t="bars" role="menuitem" type="button">Data Bars <span>▸</span></button>
-            <button class="mi" data-t="scales" role="menuitem" type="button">Color Scales <span>▸</span></button>
-            <div class="msep"></div>
-            <button class="mi" data-t="newrule" role="menuitem" type="button">New Rule…</button>
-            <button class="mi" data-t="clear" role="menuitem" type="button">Clear Rules <span>▸</span></button>
-            <button class="mi" data-t="manage" role="menuitem" type="button">Manage Rules…</button>
-          </div>
-          <div class="menu" id="hcrMenu" role="menu">
-            <button class="mi" data-t="gt" role="menuitem" type="button">Greater Than…</button>
-            <button class="mi" data-t="lt" role="menuitem" type="button">Less Than…</button>
-            <button class="mi" data-t="between" role="menuitem" type="button">Between…</button>
-            <button class="mi" data-t="eq" role="menuitem" type="button">Equal To…</button>
-            <button class="mi" data-t="text" role="menuitem" type="button">Text that Contains…</button>
-            <button class="mi" data-t="dup" role="menuitem" type="button">Duplicate Values…</button>
-          </div>
-          <div class="dlg" id="dlg" role="dialog" aria-label="Greater Than">
-            <div class="dt"><span>Greater Than</span><span aria-hidden="true">✕</span></div>
-            <div class="db">
-              <label for="gtv">Format cells that are GREATER THAN:</label>
-              <div class="f"><input id="gtv" data-t="input" autocomplete="off" inputmode="numeric"> <span>with</span>
-                <select data-t="fmt" aria-label="Format"><option>Light Red Fill with Dark Red Text</option><option>Yellow Fill with Dark Yellow Text</option><option>Green Fill with Dark Green Text</option></select></div>
-              <div class="bt"><button class="pri" data-t="ok" type="button">OK</button><button data-t="cancel" type="button">Cancel</button></div>
+        <div class="work">
+          <div class="sheet" id="sheet">
+            <div class="grid" id="grid"></div>
+            <div class="report" id="report"></div>
+            <div class="pick" id="pick">
+              <button data-t="fix-Camping" type="button">Camping</button>
+              <button data-t="fix-Clothing" type="button">Clothing</button>
+              <button data-t="fix-Footwear" type="button">Footwear</button>
+              <button data-t="fix-Food" type="button">Food &amp; Drink</button>
             </div>
           </div>
-
-          <div class="hot" id="hot"></div>
-          <div class="click" id="ck"></div>
-          <svg class="cursor" id="cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l14 11-6.5 1 3.5 7-3 1.5-3.5-7L4 20z" fill="#111" stroke="#fff" stroke-width="1.5"/></svg>
-          <div class="cap" id="cap"></div>
-          <div class="toast" id="toast" role="status"></div>
+          <div class="pane" id="pane" aria-label="AI assistant">
+            <div class="ph"><i aria-hidden="true">✦</i>Assistant</div>
+            <div class="msgs" id="msgs" aria-live="polite"></div>
+            <div class="chips" id="chips"></div>
+          </div>
         </div>
+        <div class="sheettabs" id="stabs"><button class="on" type="button" data-t="tab-data">Sheet1</button></div>
+
+        <div class="backstage" id="bs">
+          <div class="bs-nav"><div>← Back</div><div>New</div><div class="on">Open</div><div>Save</div><div>Export</div></div>
+          <div class="bs-main">
+            <h2>Open</h2>
+            <p style="margin:0 0 8px;color:#666;font-size:12.5px">Recent</p>
+            <button class="file" data-t="f-budget" type="button"><span class="fi" style="background:#1D6F42">XLS</span><span>budget_2027_draft.xlsx<small>Documents › Finance</small></span></button>
+            <button class="file" data-t="f-csv" type="button"><span class="fi" style="background:#5E6873">CSV</span><span>sales_export_oct.csv<small>Downloads · exported from the store system today</small></span></button>
+            <button class="file" data-t="f-sched" type="button"><span class="fi" style="background:#1D6F42">XLS</span><span>staff_schedule.xlsx<small>Documents › Team</small></span></button>
+          </div>
+        </div>
+
+        <div class="hot" id="hot"></div>
+        <div class="capbar"><div id="cap"></div><div class="toast" id="toast" role="status"></div></div>
       </div>
     </div>
 
     <aside class="panel">
-      <div class="modes" role="group" aria-label="Mode">
-        <button type="button" data-m="watch" aria-pressed="true">Watch</button>
-        <button type="button" data-m="try" aria-pressed="false">Try</button>
-        <button type="button" data-m="test" aria-pressed="false">Test</button>
-      </div>
-      <p class="mdesc" id="mdesc"></p>
+      <div class="brief"><small>Message from Dana, your manager</small>Can you send me October sales <b>by category</b> before Friday? Just use the store export. Thanks!</div>
       <ol class="steps" id="steps"></ol>
-      <div class="row" id="ctrl"></div>
+      <div class="row" id="ctrl"><button class="btn ghost" id="showme" type="button">Stuck? Show me</button><button class="btn ghost" id="restart" type="button">Restart</button></div>
       <div class="result" id="result" aria-live="polite"></div>
     </aside>
   </div>
-  <p class="foot">An original sample by Adam Thompson Consulting. The interface is a simplified illustration; all data is fictional.</p>
-  <div class="sr" aria-live="polite" id="live"></div>
+  <p class="foot">An original sample by Adam Thompson Consulting. The interface is a simplified illustration; the business and data are fictional.</p>
 </main>
 
 <script>
 // ---------- Data ----------
-const ROWS = [
-  ['INV-1041','Northwind Bakery',1250,12,'Sent'],
-  ['INV-1042','Blue Spruce Dental',4800,45,'Reminder sent'],
-  ['INV-1043','Riverbend Garage',960,0,'Paid'],
-  ['INV-1044','Maple Leaf Events',3200,61,'Reminder sent'],
-  ['INV-1045','Cedar Point Optical',2150,28,'Sent'],
-  ['INV-1046','Harbour Freight Co.',7400,33,'Reminder sent'],
-  ['INV-1047','Pine Ridge Café',540,5,'Sent'],
-  ['INV-1048','Summit Physio',1875,90,'Collections'],
-  ['INV-1049','Lakeside Florist',690,0,'Paid'],
-  ['INV-1050','Granite Builders',12300,31,'Reminder sent']
+const RAW = [
+  ['order_id','date','product','qty','amount'],
+  ['A-1001','2026-10-03','trail tent 2p ','1','$349.00'],
+  ['A-1002','10/04/2026','Merino Base Layer','2','178'],
+  ['A-1003','Oct 5 2026','CAMP STOVE FUEL','6','$47.94'],
+  ['A-1004','2026-10-06',' Hiking Boots','1','219.00'],
+  ['A-1005','10/08/2026','Trail Tent 2P','1','$349.00'],
+  ['A-1005','10/08/2026','Trail Tent 2P','1','$349.00'],
+  ['A-1006','2026-10-10','wool socks','3','54'],
+  ['A-1007','Oct 12 2026','Headlamp ','2','$79.98'],
+  ['A-1008','2026-10-10','Wool Socks','3','54.00'],
+  ['A-1009','10/15/2026','hiking boots','1','$219.00'],
+  ['A-1010','2026-10-18','Rain Shell','1','189'],
+  ['A-1011','Oct 20 2026','Trail Runners','1','$165.00']
 ];
-const COLS = ['A','B','C','D','E','F'];
-const HEAD = ['Invoice #','Client','Amount ($)','Days overdue','Status',''];
-
-const STEPS = [
-  { t: 'colD',  text: 'Select the <b>Days overdue</b> column by clicking its header, <b>D</b>.', hint: 'Click the column letter <b>D</b> at the top of the Days overdue column.' },
-  { t: 'cf',    text: 'On the Home tab, click <b>Conditional Formatting</b>.', hint: 'Look in the <b>Styles</b> group of the ribbon.' },
-  { t: 'hcr',   text: 'Point to <b>Highlight Cells Rules</b>.', hint: 'It’s the first option in the menu.' },
-  { t: 'gt',    text: 'Choose <b>Greater Than…</b>', hint: 'We want anything <em>more than</em> 30 days.' },
-  { t: 'input', text: 'Type <b>30</b> in the box.', hint: 'Click the box, then type 30.', type: '30' },
-  { t: 'ok',    text: 'Keep the red format and click <b>OK</b>.', hint: 'The OK button is at the bottom of the dialog.' }
+const CLEAN = [
+  {id:'A-1001',d:'2026-10-03',p:'Trail Tent 2P',q:1,a:349,c:'Camping'},
+  {id:'A-1002',d:'2026-10-04',p:'Merino Base Layer',q:2,a:178,c:'Clothing'},
+  {id:'A-1003',d:'2026-10-05',p:'Camp Stove Fuel',q:6,a:47.94,c:'Camping',ai:'Food & Drink'},
+  {id:'A-1004',d:'2026-10-06',p:'Hiking Boots',q:1,a:219,c:'Footwear'},
+  {id:'A-1005',d:'2026-10-08',p:'Trail Tent 2P',q:1,a:349,c:'Camping'},
+  {id:'A-1006',d:'2026-10-10',p:'Wool Socks',q:3,a:54,c:'Clothing'},
+  {id:'A-1007',d:'2026-10-12',p:'Headlamp',q:2,a:79.98,c:'Camping'},
+  {id:'A-1008',d:'2026-10-10',p:'Wool Socks',q:3,a:54,c:'Clothing'},
+  {id:'A-1009',d:'2026-10-15',p:'Hiking Boots',q:1,a:219,c:'Footwear'},
+  {id:'A-1010',d:'2026-10-18',p:'Rain Shell',q:1,a:189,c:'Clothing'},
+  {id:'A-1011',d:'2026-10-20',p:'Trail Runners',q:1,a:165,c:'Footwear'}
 ];
-const PANEL = ['Select column D', 'Open Conditional Formatting', 'Highlight Cells Rules', 'Greater Than…', 'Enter 30', 'Click OK'];
-const MODE_DESC = {
-  watch: 'Watch the task once. The cursor shows each click, with a caption explaining why.',
-  try: 'Your turn, with help. The highlight shows where to click, and you’ll get a hint if you miss.',
-  test: 'No highlights. Complete the task on your own, and you’ll be scored on accuracy.'
-};
+const STEP_NAMES = [
+  ['Open the export',0],['Ask AI to clean it',0],['Check the clean-up',1],
+  ['Ask AI to categorize and total',0],['Check the categories',1],['Ask AI for the report',0],['Check the report',1]
+];
+const money = n => '$' + n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 
-// ---------- Elements ----------
-const stage = document.getElementById('stage'), box = document.getElementById('box');
+// ---------- Elements & state ----------
 const $ = id => document.getElementById(id);
-const grid = $('grid'), cfMenu = $('cfMenu'), hcrMenu = $('hcrMenu'), dlg = $('dlg');
-const hot = $('hot'), cur = $('cur'), ck = $('ck'), cap = $('cap'), toast = $('toast'), live = $('live');
+const stage = $('stage'), box = $('box'), grid = $('grid'), msgs = $('msgs'), chips = $('chips'), cap = $('cap'), toast = $('toast'), hot = $('hot');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const wait = ms => new Promise(r => setTimeout(r, reduce ? Math.min(ms, 300) : ms));
+const wait = ms => new Promise(r => setTimeout(r, reduce ? 150 : ms));
+let S;  // state
 
-let mode = 'watch', step = 0, errors = 0, misses = 0, running = 0, t0 = 0;
+function fresh() {
+  return { phase:'file', step:0, view:'empty', rows:[], cats:false, total:false, flags:new Set(), fixed:false,
+    misses:0, firstPrompt:{p1:true,p2:true,p3:true}, firstCatch:{dup:true,cat:true,claim:true}, t0:Date.now(), busy:false, gen:0 };
+}
 
-// ---------- Scale the 960x600 stage to fit ----------
-function fit() { const s = box.clientWidth / 960; stage.style.transform = `scale(${s})`; box.style.height = 600 * s + 'px'; }
+// ---------- Scale ----------
+function fit(){ const s = box.clientWidth/980; stage.style.transform = `scale(${s})`; box.style.height = 640*s + 'px'; }
 addEventListener('resize', fit);
 
-// ---------- Build grid ----------
-function buildGrid() {
-  let h = '<div class="h"></div>' + COLS.map(c => `<div class="h col" data-t="col${c}">${c}</div>`).join('');
-  h += '<div class="rh">1</div>' + HEAD.map((x, i) => `<div class="th c${COLS[i]}">${x}</div>`).join('');
-  ROWS.forEach((r, i) => {
-    h += `<div class="rh">${i + 2}</div>` +
-      `<div class="cA">${r[0]}</div><div class="cB">${r[1]}</div><div class="num cC">${r[2].toLocaleString('en-CA')}</div>` +
-      `<div class="num cD" data-v="${r[3]}">${r[3]}</div><div class="cE">${r[4]}</div><div class="cF"></div>`;
-  });
-  for (let i = ROWS.length + 2; i <= 16; i++) h += `<div class="rh">${i}</div>` + COLS.map(c => `<div class="c${c}"></div>`).join('');
+// ---------- Rendering ----------
+function renderSteps(){
+  $('steps').innerHTML = STEP_NAMES.map(([n,ck],i)=>`<li class="${ck?'ck ':''}${i<S.step?'done':i===S.step?'now':''}">${n}</li>`).join('');
+}
+function renderGrid(){
+  const cols = ['A','B','C','D','E','F'];
+  let h = '<div class="h"></div>' + cols.map(c=>`<div class="h">${c}</div>`).join('') + '<div class="h"></div>';
+  let r = 1;
+  const line = cells => { h += `<div class="rh">${r++}</div>` + cells.join('') + '<div></div>'; };
+  if (S.view === 'raw') {
+    RAW.forEach(row => line([...row.map(v=>`<div>${v}</div>`), '<div></div>']));
+  } else if (S.view === 'clean') {
+    line(['Order','Date','Product','Qty','Amount', S.cats?'Category':''].map(v=>`<div class="${S.cats||v?'th':''}">${v}</div>`));
+    S.rows.forEach((o,i) => {
+      const b = i%2 ? ' band' : '', f = S.flags.has(o.id) ? ' flag' : '', n = S.fresh===o.id ? ' new':'' ;
+      const cat = S.cats ? (o.id==='A-1003' && !S.fixed ? o.ai : o.c) : '';
+      const wrong = S.cats && o.id==='A-1003' && !S.fixed && S.phase==='catfix' ? ' wrong' : '';
+      line([`<div class="${b+f+n}">${o.id}</div>`,`<div class="${b+f+n}">${o.d}</div>`,`<div class="${b+f+n}">${o.p}</div>`,
+        `<div class="num${b+f+n}">${o.q}</div>`,`<div class="num${b+f+n}">${money(o.a)}</div>`,
+        S.cats ? `<div class="cat${b+f+n+wrong}" data-t="cat-${o.id}">${cat}</div>` : `<div class="${b}"></div>`]);
+    });
+    if (S.total) {
+      const t = S.rows.reduce((s,o)=>s+o.a,0);
+      line(['<div class="tot">Total</div>','<div class="tot"></div>','<div class="tot"></div>','<div class="tot num">'+S.rows.reduce((s,o)=>s+o.q,0)+'</div>',`<div class="tot num">${money(t)}</div>`,'<div class="tot"></div>']);
+    }
+  }
+  while (r <= 15) line(cols.map(()=>'<div></div>'));
   grid.innerHTML = h;
 }
-
-function reset() {
-  buildGrid();
-  [cfMenu, hcrMenu, dlg].forEach(e => e.classList.remove('open'));
-  $('gtv').value = ''; $('nb').textContent = 'A1'; $('fv').textContent = 'Invoice #';
-  hot.style.display = 'none'; cap.style.display = 'none'; toast.className = 'toast'; cur.style.display = 'none';
-  step = 0; errors = 0; misses = 0;
-  renderSteps();
+function say(html){ cap.innerHTML = '<span>' + html + '</span>'; }
+function flash(html, kind){ toast.innerHTML = html; toast.className = 'toast ' + kind; }
+function clearToast(){ toast.className = 'toast'; }
+function rect(sel){
+  const e = stage.querySelector(sel); if (!e) return null;
+  const s = stage.getBoundingClientRect(), r = e.getBoundingClientRect(), k = s.width/980;
+  return { x:(r.left-s.left)/k, y:(r.top-s.top)/k, w:r.width/k, h:r.height/k };
+}
+function showHot(sel){
+  const r = rect(sel); if (!r) return;
+  Object.assign(hot.style,{left:r.x-4+'px',top:r.y-4+'px',width:r.w+8+'px',height:r.h+8+'px',display:'block'});
+}
+function hideHot(){ hot.style.display = 'none'; }
+function msg(cls, html){ const d = document.createElement('div'); d.className = 'm '+cls; d.innerHTML = html; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d; }
+async function aiSay(html, ms=900){
+  const g = S.gen; const d = msg('a typing','Thinking…'); await wait(ms);
+  if (g !== S.gen) return false;
+  d.className = 'm a'; d.innerHTML = html; msgs.scrollTop = msgs.scrollHeight; return true;
+}
+function setChips(label, list){
+  chips.innerHTML = (label?`<p>${label}</p>`:'') + list.map(c=>`<button class="chip ${c.cls||''}" data-t="${c.t}" type="button">${c.text}</button>`).join('');
 }
 
-// ---------- Geometry ----------
-function el(t) { return stage.querySelector(`[data-t="${t}"]`); }
-function rect(t) {
-  const e = el(t), s = stage.getBoundingClientRect(), r = e.getBoundingClientRect(), k = s.width / 960;
-  return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k };
+// ---------- Phase definitions ----------
+// Each phase: the instruction, what "Show me" points at, and what the hint says on a miss.
+const PHASES = {
+  file:   { say:'Dana needs October sales by category. Start by opening the store’s export: click <b>File</b>.', target:'[data-t="file"]', hint:'Open files from the <b>File</b> tab.' },
+  pick:   { say:'Open <b>sales_export_oct.csv</b>, the file exported from the store system.', target:'[data-t="f-csv"]', hint:'Look for the <b>.csv</b> file in Downloads.' },
+  assist: { say:'Messy: mixed date formats, text amounts, odd capitals, a duplicate. Open the <b>Assistant</b> to help.', target:'[data-t="assistant"]', hint:'The <b>Assistant</b> button is at the right end of the ribbon.' },
+  p1:     { say:'Tell the Assistant what to do. <b>Pick the best prompt.</b>', target:'[data-t="p1-good"]', hint:'Good prompts say exactly what “clean” means.' },
+  dup:    { say:'<b>AI check:</b> it removed two rows as duplicates (highlighted). Were both really duplicates?', target:'[data-t="restore"]', hint:'Compare the order numbers. Same items doesn’t mean same order.' },
+  p2:     { say:'Now categorize and total. <b>Pick the best prompt.</b>', target:'[data-t="p2-good"]', hint:'Dana wants totals <b>by category</b>. Give the AI your categories.' },
+  cat:    { say:'<b>AI check:</b> categories are usually right, but not always. Click any category that’s wrong, or confirm.', target:'[data-t="cat-A-1003"]', hint:'Read each product. What is it actually used for?' },
+  catfix: { say:'Choose the right category for <b>Camp Stove Fuel</b>.', target:'[data-t="fix-Camping"]', hint:'Stove fuel is camping gear in this store’s categories.' },
+  p3:     { say:'Time for the report. <b>Pick the best prompt.</b>', target:'[data-t="p3-good"]', hint:'Ask for exactly what Dana needs, using only this data.' },
+  claim:  { say:'<b>AI check:</b> before this goes to Dana, click any statement the data <b>can’t support</b>, or approve it.', target:'[data-t="claim-3"]', hint:'This file only contains October. What can’t it know?' }
+};
+function go(phase, step){
+  S.phase = phase; if (step !== undefined) S.step = step; S.misses = 0;
+  hideHot(); renderSteps();
+  if (PHASES[phase]) say(PHASES[phase].say);
 }
-function showHot(t) { const r = rect(t); Object.assign(hot.style, { left: r.x - 4 + 'px', top: r.y - 4 + 'px', width: r.w + 8 + 'px', height: r.h + 8 + 'px', display: 'block' }); }
-function showCap(t, html) {
-  const r = rect(t); cap.innerHTML = html; cap.style.display = 'block';
-  let x = r.x + r.w + 16, y = r.y;
-  if (x + 280 > 960) x = Math.max(8, r.x - 286);
-  if (t === 'colD') { x = r.x + r.w + 14; y = r.y + 34; }
-  if (t === 'input') { x = r.x; y = r.y + r.h + 46; }
-  if (t === 'gt') { x = r.x; y = r.y + 165; }
-  cap.style.left = x + 'px'; cap.style.top = Math.min(y, 520) + 'px';
+function miss(text){
+  S.misses++;
+  const p = PHASES[S.phase]; if (!p) return;
+  if (S.phase === 'dup') S.firstCatch.dup = false;
+  if (S.phase === 'cat' || S.phase === 'catfix') S.firstCatch.cat = false;
+  if (S.phase === 'claim') S.firstCatch.claim = false;
+  flash(text || ('Not quite. ' + p.hint), 'bad');
+  if (S.misses >= 2) showHot(p.target);
 }
-function flash(msg, kind) { toast.innerHTML = msg; toast.className = 'toast ' + kind; live.textContent = toast.textContent; }
 
-// ---------- Actions (what each correct step does) ----------
-function act(t) {
-  if (t === 'colD') {
-    stage.querySelectorAll('.cD').forEach(c => c.classList.add('sel'));
-    el('colD').classList.add('sel'); $('nb').textContent = 'D1'; $('fv').textContent = 'Days overdue';
+// ---------- Interaction ----------
+async function handle(t){
+  if (S.busy) return;
+  const ph = S.phase;
+  // Always-safe clicks
+  if (t === 'home' || t === 'tab-data' || t === 'tab-report') return;
+
+  if (ph === 'file') { if (t === 'file') { clearToast(); $('bs').classList.add('open'); return go('pick'); } return miss(); }
+
+  if (ph === 'pick') {
+    if (t === 'f-csv') {
+      clearToast(); $('bs').classList.remove('open');
+      $('title').textContent = 'sales_export_oct.csv · Spreadsheet'; S.view = 'raw'; renderGrid();
+      $('fv').textContent = 'order_id'; return go('assist', 1);
+    }
+    if (t === 'f-budget' || t === 'f-sched') return miss('That’s not the sales export. Look for the <b>.csv</b> file from the store system.');
+    return miss();
   }
-  if (t === 'cf') { const r = rect('cf'); cfMenu.style.left = r.x + 'px'; cfMenu.style.top = r.y + r.h + 2 + 'px'; cfMenu.classList.add('open'); }
-  if (t === 'hcr') { const r = rect('hcr'); hcrMenu.style.left = r.x + r.w + 2 + 'px'; hcrMenu.style.top = r.y - 4 + 'px'; hcrMenu.classList.add('open'); el('hcr').classList.add('hov'); }
-  if (t === 'gt') { cfMenu.classList.remove('open'); hcrMenu.classList.remove('open'); el('hcr').classList.remove('hov'); dlg.classList.add('open'); }
-  if (t === 'ok') {
-    dlg.classList.remove('open');
-    stage.querySelectorAll('.cD[data-v]').forEach(c => { if (+c.dataset.v > 30) c.classList.add('hl'); });
+
+  if (ph === 'assist') {
+    if (t === 'assistant') {
+      clearToast(); $('pane').classList.add('open'); $('aiBtn').classList.add('on');
+      msg('a','Hi! I can see <b>sales_export_oct.csv</b> (12 rows, 5 columns). What would you like to do?');
+      setChips('Choose a prompt', [
+        {t:'p1-vague', text:'Clean this up.'},
+        {t:'p1-good',  text:'Standardize dates to YYYY-MM-DD, convert amounts to numbers, tidy product names, and remove duplicate orders.'},
+        {t:'p1-over',  text:'Fix everything and write my report for Dana.'}
+      ]);
+      return go('p1');
+    }
+    return miss();
+  }
+
+  if (ph === 'p1') {
+    if (!t.startsWith('p1-')) return miss();
+    const txt = stage.querySelector(`[data-t="${t}"]`).textContent; msg('u', txt); clearToast(); S.busy = true;
+    if (t === 'p1-vague') { S.firstPrompt.p1 = false; await aiSay('Happy to help! What should “clean” mean here: dates, amounts, text, duplicates, or all of these?'); S.busy=false; return flash('Vague prompt, vague result. The AI had to ask what you meant. Be specific.', 'bad'); }
+    if (t === 'p1-over') { S.firstPrompt.p1 = false; await aiSay('Done! I made <b>31 changes</b> and drafted a report for Dana.<br><span style="color:#888">(Changes not shown.)</span>'); S.busy=false; return flash('Fast, but now you can’t see or check any of the 31 changes. Work in stages so you can verify each one.', 'bad'); }
+    chips.innerHTML = '';
+    const ok = await aiSay('Done. I standardized <b>12 dates</b>, converted <b>12 amounts</b> to numbers, tidied <b>7 product names</b>, formatted it as a table, and removed <b>2 duplicate rows</b>: A-1005 and A-1008.', 1300);
+    if (!ok) return;
+    S.view = 'clean'; S.rows = CLEAN.filter(o => o.id !== 'A-1008').map(o=>({...o}));
+    S.flags = new Set(['A-1005','A-1006']); renderGrid(); $('fv').textContent = 'Order';
+    msg('a','Removed rows:<br>• <b>A-1005</b> Trail Tent 2P, $349.00 (exact copy of the row above)<br>• <b>A-1008</b> Wool Socks ×3, $54.00, Oct 10 (matches A-1006)');
+    setChips('Review the changes', [
+      {t:'accept',  text:'Accept all changes', cls:'act'},
+      {t:'restore', text:'Restore A-1008, keep the rest', cls:'alt'},
+      {t:'undo',    text:'Undo everything', cls:'alt'}
+    ]);
+    S.busy = false; return go('dup', 2);
+  }
+
+  if (ph === 'dup') {
+    if (t === 'accept') return miss('Look again: A-1008 has its own order number. Same items and date as A-1006, but it’s a separate sale. Accepting would undercount October.');
+    if (t === 'undo') return miss('The clean-up was mostly right. Keep the good changes and fix the one mistake.');
+    if (t !== 'restore') return miss();
+    clearToast(); msg('u','Restore A-1008. It has a different order number, so it’s a separate sale.');
+    chips.innerHTML = ''; S.busy = true;
+    const ok = await aiSay('You’re right, A-1008 is a separate order. Restored. The other removal (A-1005) was a true duplicate.');
+    if (!ok) return;
+    S.rows = CLEAN.map(o=>({...o})); S.flags = new Set(); S.fresh = 'A-1008'; renderGrid();
+    flash('Good catch. Accepting that change would have dropped a real $54 sale.', 'good');
+    setChips('Choose a prompt', [
+      {t:'p2-vague', text:'Add categories.'},
+      {t:'p2-tot',   text:'Total everything up.'},
+      {t:'p2-good',  text:'Add a Category column (Camping, Clothing or Footwear) based on Product, and a Total row for Qty and Amount.'}
+    ]);
+    S.busy = false; return go('p2', 3);
+  }
+
+  if (ph === 'p2') {
+    if (!t.startsWith('p2-')) return miss();
+    const txt = stage.querySelector(`[data-t="${t}"]`).textContent; msg('u', txt); clearToast(); S.busy = true;
+    if (t === 'p2-vague') { S.firstPrompt.p2 = false; await aiSay('I added <b>8 categories</b>: Tents, Apparel, Socks, Fuel, Lighting, Boots, Shoes, Outerwear.'); S.busy=false; return flash('Without your categories, the AI invents its own. Eight categories won’t match how Dana reports sales. Tell it the list.', 'bad'); }
+    if (t === 'p2-tot') { S.firstPrompt.p2 = false; await aiSay('October total: <b>$1,903.92</b> across 11 orders.'); S.busy=false; return flash('Right number, but Dana asked for totals <b>by category</b>. Ask for what the report needs.', 'bad'); }
+    chips.innerHTML = ''; S.fresh = null;
+    const ok = await aiSay('Added a <b>Category</b> column for 11 orders and a <b>Total</b> row: 22 items, <b>$1,903.92</b>.', 1200);
+    if (!ok) return;
+    S.cats = true; S.total = true; renderGrid(); $('fv').textContent = 'Category';
+    setChips('', [{t:'allright', text:'The categories all look right', cls:'act'}]);
+    S.busy = false; return go('cat', 4);
+  }
+
+  if (ph === 'cat') {
+    if (t === 'cat-A-1003') {
+      clearToast(); const r = rect('[data-t="cat-A-1003"]'), pk = $('pick');
+      pk.style.left = r.x + 'px'; pk.style.top = (r.y - 158 + r.h + 2) + 'px'; pk.classList.add('open');
+      S.phase = 'catfix'; renderGrid(); say(PHASES.catfix.say); S.misses = 0; hideHot(); return;
+    }
+    if (t.startsWith('cat-')) return miss('That one’s right. Read each product and check its category.');
+    if (t === 'allright') return miss('One is off. Look at what each product is actually used for.');
+    return miss();
+  }
+
+  if (ph === 'catfix') {
+    if (t === 'fix-Camping') {
+      $('pick').classList.remove('open'); S.fixed = true; renderGrid(); clearToast();
+      msg('u','Camp Stove Fuel should be <b>Camping</b>, not Food &amp; Drink.');
+      chips.innerHTML = ''; S.busy = true;
+      const ok = await aiSay('Thanks, updated. That moves $47.94 into Camping.');
+      if (!ok) return;
+      flash('Caught it. Left alone, Camping would have been understated and a fourth category would have appeared in Dana’s report.', 'good');
+      setChips('Choose a prompt', [
+        {t:'p3-hype',  text:'Write an impressive sales report for Dana.'},
+        {t:'p3-good',  text:'Create an October summary by category: orders, total and % of sales, with a bar chart. Use only the data in this sheet.'},
+        {t:'p3-chart', text:'Make a chart.'}
+      ]);
+      S.busy = false; return go('p3', 5);
+    }
+    if (t.startsWith('fix-')) return miss('Not that one. Which of the store’s categories does stove fuel belong to?');
+    return miss();
+  }
+
+  if (ph === 'p3') {
+    if (!t.startsWith('p3-')) return miss();
+    const txt = stage.querySelector(`[data-t="${t}"]`).textContent; msg('u', txt); clearToast(); S.busy = true;
+    if (t === 'p3-hype') { S.firstPrompt.p3 = false; await aiSay('October was a <b>record-breaking month</b>! Customers can’t get enough of our outdoor gear, and momentum has never been stronger…'); S.busy=false; return flash('Ask for facts, not spin. Say what to include and that it should only use this data.', 'bad'); }
+    if (t === 'p3-chart') { S.firstPrompt.p3 = false; await aiSay('Here’s a line chart of <b>Qty by Order ID</b>.'); S.busy=false; return flash('Technically a chart, but not one Dana can use. Ask for the specific summary you need.', 'bad'); }
+    chips.innerHTML = '';
+    const ok = await aiSay('Created a <b>Report</b> sheet with a category summary, a bar chart and a short written summary.', 1300);
+    if (!ok) return;
+    buildReport(); setChips('', [{t:'approve', text:'Approve and send to Dana', cls:'act'}]);
+    S.busy = false; return go('claim', 6);
+  }
+
+  if (ph === 'claim') {
+    if (t === 'claim-3') {
+      clearToast(); const c = stage.querySelector('[data-t="claim-3"]'); c.classList.add('gone'); c.removeAttribute('data-t');
+      msg('u','Remove the September comparison. This file only has October data.');
+      chips.innerHTML = ''; S.busy = true;
+      const ok = await aiSay('You’re right. There’s no September data here, so I can’t support that. Removed.');
+      if (!ok) return;
+      S.busy = false; return finish();
+    }
+    if (t === 'claim-1' || t === 'claim-2') return miss('That one checks out against the table. Look for a claim that needs data this file doesn’t have.');
+    if (t === 'approve') return miss('Not yet. One sentence can’t be backed up by this file. Dana might repeat it in Friday’s meeting.');
+    return miss();
   }
 }
 
-// ---------- Panel ----------
-function renderSteps() {
-  $('steps').style.display = (mode === 'test' && step < STEPS.length) ? 'none' : '';
-  $('steps').innerHTML = PANEL.map((p, i) => `<li class="${i < step ? 'done' : i === step ? 'now' : ''}">${p}</li>`).join('');
-}
-function setMode(m) {
-  mode = m; running++;
-  document.querySelectorAll('.modes button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === m)));
-  $('mdesc').textContent = MODE_DESC[m];
-  $('result').className = 'result';
-  reset();
-  if (m === 'watch') { $('ctrl').innerHTML = '<button class="btn" id="play" type="button">▶ Play demo</button>'; $('play').onclick = playDemo; showCap('colD', 'Press <b>Play demo</b> to watch the task.'); }
-  else { $('ctrl').innerHTML = '<button class="btn ghost" id="restart" type="button">Restart</button>'; $('restart').onclick = () => setMode(mode); guide(); t0 = Date.now(); }
-  if (m === 'test') { cap.style.display = 'block'; cap.innerHTML = '<b>Your task:</b> highlight every invoice that is more than 30 days overdue in red.'; cap.style.left = '600px'; cap.style.top = '470px'; }
-}
-function guide() {
-  renderSteps();
-  const s = STEPS[step]; if (!s) return;
-  if (mode === 'try') { showHot(s.t); showCap(s.t, s.text); }
-  if (s.t === 'input' && mode !== 'watch') $('gtv').focus({ preventScroll: true });
-}
-
-// ---------- Watch mode ----------
-async function playDemo() {
-  const id = ++running; reset();
-  $('play').disabled = true; $('play').textContent = 'Playing…';
-  cur.style.display = 'block'; cur.style.left = '480px'; cur.style.top = '420px';
-  await wait(400);
-  for (let i = 0; i < STEPS.length; i++) {
-    if (id !== running) return;
-    step = i; renderSteps();
-    const s = STEPS[i], r = rect(s.t);
-    showCap(s.t, s.text); live.textContent = cap.textContent;
-    cur.style.left = r.x + r.w / 2 + 'px'; cur.style.top = r.y + r.h / 2 + 'px';
-    await wait(1100); if (id !== running) return;
-    Object.assign(ck.style, { left: r.x + r.w / 2 - 15 + 'px', top: r.y + r.h / 2 - 15 + 'px' });
-    ck.classList.remove('go'); void ck.offsetWidth; ck.classList.add('go');
-    if (s.type) { for (const ch of s.type) { $('gtv').value += ch; await wait(220); } }
-    else act(s.t);
-    await wait(1500);
-  }
-  if (id !== running) return;
-  step = STEPS.length; renderSteps();
-  cur.style.display = 'none';
-  showCap('colD', 'Done. Every invoice over <b>30 days</b> is now flagged in red, and the rule updates itself as the numbers change.');
-  $('ctrl').innerHTML = '<button class="btn ghost" id="play" type="button">↺ Replay</button><button class="btn" id="totry" type="button">Now try it →</button>';
-  $('play').onclick = playDemo; $('totry').onclick = () => setMode('try');
+function buildReport(){
+  const cats = ['Camping','Clothing','Footwear'];
+  const tot = S.rows.reduce((s,o)=>s+o.a,0);
+  const data = cats.map(c => { const rs = S.rows.filter(o=>o.c===c); const sum = rs.reduce((s,o)=>s+o.a,0); return {c, n:rs.length, sum, pct:Math.round(sum/tot*1000)/10}; }).sort((a,b)=>b.sum-a.sum);
+  const max = data[0].sum;
+  const bars = data.map((d,i)=>{ const w = Math.round(d.sum/max*170); const y = 6 + i*42;
+    return `<text x="0" y="${y+20}" font-size="13" fill="#333">${d.c}</text><rect x="72" y="${y+4}" width="${w}" height="24" rx="3" fill="${i===0?'#1D6F42':'#7FB394'}"/><text x="${78+w}" y="${y+21}" font-size="12.5" fill="#333">${money(d.sum)}</text>`; }).join('');
+  $('report').innerHTML = `
+    <h3>October Sales by Category</h3><div class="rs">Source: sales_export_oct.csv · 11 orders · Oct 3–20, 2026</div>
+    <div class="rgrid">
+      <table class="rt"><tr><th>Category</th><th class="n">Orders</th><th class="n">Total</th><th class="n">%</th></tr>
+        ${data.map(d=>`<tr><td>${d.c}</td><td class="n">${d.n}</td><td class="n">${money(d.sum)}</td><td class="n">${d.pct}%</td></tr>`).join('')}
+        <tr class="t"><td>Total</td><td class="n">11</td><td class="n">${money(tot)}</td><td class="n">100%</td></tr></table>
+      <svg viewBox="0 0 330 132" width="100%" height="132" role="img" aria-label="Bar chart of sales by category">${bars}</svg>
+    </div>
+    <div class="claims"><p class="lbl">✦ AI-written summary</p>
+      <button class="claim" data-t="claim-1" type="button">October sales totalled ${money(tot)} across 11 orders.</button>
+      <button class="claim" data-t="claim-2" type="button">Camping was the largest category at ${data[0].pct}% of sales, led by two tent orders.</button>
+      <button class="claim" data-t="claim-3" type="button">Sales were up 18% compared with September.</button>
+    </div>`;
+  $('report').classList.add('open');
+  $('stabs').innerHTML = '<button type="button" data-t="tab-data">Sheet1</button><button class="on" type="button" data-t="tab-report">Report</button>';
+  $('title').textContent = 'October_sales_report.xlsx · Spreadsheet';
 }
 
-// ---------- Try / Test interaction ----------
-function handle(t, e) {
-  if (mode === 'watch') return;
-  const s = STEPS[step]; if (!s) return;
-  if (t === 'input' || t === 'fmt') return;
-  if (s.t === 'input') return miss(t === 'ok' ? 'Enter <b>30</b> in the box first.' : s.hint);
-  if (t === s.t) {
-    act(t); step++; misses = 0; toast.className = 'toast';
-    if (step >= STEPS.length) return finish();
-    guide();
-  } else miss(s.hint);
-}
-function miss(hint) {
-  errors++; misses++;
-  if (mode === 'try') flash('Not quite. ' + hint, 'bad');
-  else flash(misses >= 2 ? 'Hint: ' + hint : 'Not quite. Try again.', 'bad');
-}
-function finish() {
-  hot.style.display = 'none'; renderSteps();
-  const secs = Math.round((Date.now() - t0) / 1000);
-  if (mode === 'try') {
-    showCap('colD', 'Nice work. Every invoice over <b>30 days</b> is flagged. Ready to do it without help?');
-    flash('Task complete.', 'good');
-    $('ctrl').innerHTML = '<button class="btn ghost" id="restart" type="button">Try again</button><button class="btn" id="totest" type="button">Take the test →</button>';
-    $('restart').onclick = () => setMode('try'); $('totest').onclick = () => setMode('test');
-  } else {
-    cap.style.display = 'none';
-    const acc = Math.max(0, Math.round(100 * STEPS.length / (STEPS.length + errors)));
-    const msg = errors === 0 ? 'Perfect: no wrong clicks.' : errors === 1 ? 'Solid. One wrong turn, but you got there.' : errors <= 2 ? 'Solid. A couple of wrong turns, but you got there.' : 'You finished. Run it once more to build the habit.';
-    flash('Task complete.', 'good');
-    $('result').className = 'result show';
-    $('result').innerHTML = `<p class="eyebrow" style="margin-top:4px">Your result</p><div class="score">${acc}%</div><p style="margin:0 0 6px">${msg}</p><p class="mdesc">${errors} wrong click${errors === 1 ? '' : 's'} · ${secs} seconds</p><div class="row"><button class="btn ghost" id="restart2" type="button">Retake</button><a class="btn orange" href="/#contact">Build one for your team →</a></div>`;
-    $('restart2').onclick = () => setMode('test');
-    $('ctrl').innerHTML = '';
-  }
+function finish(){
+  S.phase = 'done'; S.step = 7; renderSteps(); hideHot();
+  say('Report ready for Dana: accurate, categorized, and every claim backed by the data.');
+  flash('Task complete.', 'good');
+  const p = Object.values(S.firstPrompt).filter(Boolean).length, c = Object.values(S.firstCatch).filter(Boolean).length;
+  const secs = Math.round((Date.now()-S.t0)/1000), mm = Math.floor(secs/60), ss = String(secs%60).padStart(2,'0');
+  const msgTxt = (p===3 && c===3) ? 'Excellent. You asked clearly and caught every AI mistake on the first try.'
+    : c===3 ? 'You caught every AI mistake. Sharper prompts will save you a few rounds.'
+    : 'You got there. The habit to build: never send AI output you haven’t checked.';
+  $('result').className = 'result show';
+  $('result').innerHTML = `<p class="eyebrow" style="margin:6px 0 0">Your result</p>
+    <div class="score"><div><b>${p}/3</b><span>best prompt on first try</span></div><div><b>${c}/3</b><span>AI mistakes caught first time</span></div></div>
+    <p style="margin:0 0 6px;font-size:15.5px">${msgTxt}</p><p class="small">Finished in ${mm}:${ss}. Without the checks, Dana would have received a report that missed a $54 sale, misfiled stove fuel, and claimed growth no one can prove.</p>
+    <div class="row"><button class="btn ghost" id="again" type="button">Try again</button><a class="btn orange" href="/#contact">Build one for your team →</a></div>`;
+  $('again').onclick = start;
+  $('ctrl').style.display = 'none';
 }
 
+// ---------- Start / wiring ----------
+function start(){
+  const g = S ? S.gen + 1 : 0;
+  S = fresh(); S.gen = g;
+  $('bs').classList.remove('open'); $('pane').classList.remove('open'); $('aiBtn').classList.remove('on');
+  $('pick').classList.remove('open'); $('report').classList.remove('open'); $('report').innerHTML = '';
+  msgs.innerHTML = ''; chips.innerHTML = ''; clearToast(); hideHot();
+  $('title').textContent = 'Book1 · Spreadsheet'; $('fv').textContent = ''; $('nb').textContent = 'A1';
+  $('stabs').innerHTML = '<button class="on" type="button" data-t="tab-data">Sheet1</button>';
+  $('result').className = 'result'; $('ctrl').style.display = '';
+  renderGrid(); go('file', 0);
+}
 stage.addEventListener('click', e => {
   const tgt = e.target.closest('[data-t]');
-  if (mode === 'watch') return;
-  if (!tgt) { if (e.target.closest('#stage') && !e.target.closest('.dlg')) miss((STEPS[step] || {}).hint || ''); return; }
-  handle(tgt.dataset.t, e);
+  if (tgt) return handle(tgt.dataset.t);
+  if (S.phase === 'done' || S.busy) return;
+  if (e.target.closest('.msgs,.ph,.chips,.bs-nav,.bs-main,.report,.fbar,.tb,.capbar')) return;
+  miss();
 });
-$('gtv').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); handle('ok', e); } });
-$('gtv').addEventListener('input', () => {
-  toast.className = 'toast';
-  if (mode !== 'watch' && STEPS[step] && STEPS[step].t === 'input' && $('gtv').value.trim() === '30') { step++; misses = 0; guide(); }
-});
-document.querySelectorAll('.modes button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+$('showme').onclick = () => { const p = PHASES[S.phase]; if (p) { showHot(p.target); flash(p.hint, 'good'); } };
+$('restart').onclick = start;
 
-buildGrid(); fit(); setMode('watch');
+fit(); start();
 </script>
 </body>
 </html>
